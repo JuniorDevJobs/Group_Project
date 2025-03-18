@@ -1,6 +1,11 @@
-FROM python:3.12
+FROM python:3.11
+
 WORKDIR /app
-COPY ./requirements.txt /app/
+
+COPY . .
+
 RUN pip install -r requirements.txt
-COPY . /app/
-CMD gunicorn --bind 0.0.0.0:8000 --workers 3 encouragement_proj.wsgi:application
+
+EXPOSE 8000
+
+CMD ["python", "manage.py", "runserver", "0.0.0.0:8000"]

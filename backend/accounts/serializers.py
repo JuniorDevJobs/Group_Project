@@ -1,19 +1,26 @@
 from rest_framework import serializers
-from django.contrib.auth.models import User
+from django.contrib.auth import get_user_model
+from django.core.exceptions import ValidationError
 
-class SignupSerializer(serializers.Serializer):
-    username = serializers.CharField(max_length=20)
+User = get_user_model()
+
+class SignupSerializer(serializers.ModelSerializer):
     password = serializers.CharField(write_only=True)
 
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-    
-    def create(self, validated_data):
-        user_data = {
-            'username': validated_data['username'],
-            'password': validated_data['password']
-        }
+    class Meta:
+        model = User
+        fields = ['username', 'email', 'password']
 
-        user = User.objects.create_user(**user_data)
-    
+    def validate_password(self, value):
+        # Custom password validation logic 
+        if len(value) < 8:
+            raise ValidationError("Password must be at least 8 characters long.")
+        return value
+
+    def create(self, validated_data):
+        user = User.objects.create_user(
+            username=validated_data['username'],
+            password=validated_data['password'],
+            email=validated_data['email'],
+        )
         return user
