@@ -1,64 +1,83 @@
-import React, {useState} from "react"
+import React, { useState } from "react";
 import { useNavigate } from 'react-router-dom';
-import { Paper, Box, TextField } from "@mui/material"
+import { Paper, Box, TextField } from "@mui/material";
 import Button from '@mui/material/Button';
+import { login } from "../api/Authapi";
+
 export default function LoginPage() {
-    const [loading, setLoading]=useState(false)
-    const navigate=useNavigate()
-    const handleLogin = () => {
-        return (
-            setLoading(true),
-            console.log("logging in")
-        )
-    }
+    const [loading, setLoading] = useState(false);
+    const [formData, setFormData] = useState({ username: "", password: "" });
+
+    const navigate = useNavigate();
+
+    const handleChange = (e) => {
+        setFormData({
+            ...formData,
+            [e.target.name]: e.target.value
+        });
+    };
+
+    const handleLogin = async (e) => {
+        e.preventDefault();
+        setLoading(true);
+        try {
+            const userInfo = await login(formData);
+            localStorage.setItem("access", userInfo.access);
+            navigate("/home");
+        } catch (error) {
+            console.error("Login failed", error);
+            setLoading(false); 
+        }
+    };
+
     const handleNewUser = () => {
-        return(
-            navigate("/signup")
-        )
-    }
+        navigate("/signup");
+    };
 
     return (
-        <Paper
-        square={false}
-        elevation={4}>
-
+        <Paper square={false} elevation={4}>
             <h3>Login</h3>
             <Box
                 component="form"
+                onSubmit={handleLogin}
                 sx={{ '& .MuiTextField-root': { m: 1, width: '25ch' } }}
                 noValidate
-                autoComplete="off"
-                >
-                    <div>
-                        <TextField
+            >
+                <div>
+                    <TextField
                         required
-                        id="outlined-required"
+                        id="username"
+                        name="username"
+                        value={formData.username}
                         label="Username"
                         placeholder="Enter username"
-                        />
-                    </div>
-                    <div>
-                        <TextField
+                        onChange={handleChange}
+                    />
+                </div>
+                <div>
+                    <TextField
                         required
-                        id="outlined-required"
+                        id="password"
+                        name="password"
+                        value={formData.password}
                         label="Password"
                         placeholder="Enter password"
-                        />
-                    </div>
-                    <div>
+                        type="password" 
+                        onChange={handleChange}
+                    />
+                </div>
+                <div>
                     <Button
-                        onClick={handleLogin}
-                        // endIcon={<SendIcon />}
-                        loading={loading}
-                        loadingPosition="end"
+                        type="submit"
                         variant="contained"
-                        >
-                        Submit
+                        disabled={loading} // Disable button while loading
+                    >
+                        {loading ? "Logging in..." : "Submit"}
                     </Button>
-                    </div>
+                </div>
             </Box>
-            <p> Need an account?</p>
-            <Button onClick={handleNewUser}>Create an Account </Button>
+            <p>Need an account?</p>
+            <Button onClick={handleNewUser}>Create an Account</Button>
         </Paper>
-    )
+    );
 }

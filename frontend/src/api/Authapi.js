@@ -6,6 +6,7 @@ async function basicFetch(url, payload) {
   
   
   export async function signup(context) {
+    console.log(context)
     const payload = {
       method: "POST",
       headers: {
@@ -13,12 +14,13 @@ async function basicFetch(url, payload) {
       },
       body: JSON.stringify(context)
     }
-    const body = await basicFetch("http://localhost:8000/api/v1/accounts/signup/",payload)
+    const body = await basicFetch("http://localhost:8000/accounts/signup/",payload)
     return body
   }
   
 
   export async function login(context) {
+    console.log(context)
     const payload = {
       method: "POST",
       headers: {
@@ -26,7 +28,7 @@ async function basicFetch(url, payload) {
       },
       body: JSON.stringify(context)
     }
-    const body = await basicFetch("http://localhost:8000/api/v1/accounts/get-token/", payload)
+    const body = await basicFetch("http://localhost:8000/accounts/login/", payload)
     return body.token
   }
 
