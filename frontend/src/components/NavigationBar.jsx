@@ -8,8 +8,7 @@ import WorkIcon from '@mui/icons-material/Work';
 import Button from '@mui/material/Button';
 import { useNavigate } from 'react-router-dom';
 
-
-const pages = ['Job Search', 'Interview Prep'];
+const pages = ['Job Search', 'Interview Prep', 'Internship', 'Resources'];
 
 function NavigationBar() {
     const [loggedIn, setLoggedIn] = useState(false); 
