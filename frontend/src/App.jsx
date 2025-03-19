@@ -5,7 +5,6 @@ import LoginPage from './pages/LoginPage'
 import SignUpPage from "./pages/SignUpPage"
 import HomePage from './pages/HomePage'
 import JobSearch from './pages/JobSearch'
-import InternshipSearch from './pages/IntershipSearch'
 import ResourcesPage from './pages/ResourcesPage'
 function App() {
 
@@ -18,7 +17,6 @@ function App() {
           <Route path="/login" element={<LoginPage />}/>
           <Route path="/signup" element = {<SignUpPage />} />
           <Route path="/JobSearch" element={<JobSearch />} />
-          <Route path="/Internship" element={<InternshipSearch />} />
           <Route path="/Resources" element={<ResourcesPage />} />
         </Routes>
       </BrowserRouter>
