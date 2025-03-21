@@ -1,13 +1,14 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import { useNavigate } from 'react-router-dom';
 import { Paper, Box, TextField } from "@mui/material";
 import Button from '@mui/material/Button';
 import { login } from "../api/Authapi";
+import UserContext from "../context/UserContext";
 
 export default function LoginPage() {
     const [loading, setLoading] = useState(false);
     const [formData, setFormData] = useState({ username: "", password: "" });
-
+    const {setLoggedIn} = useContext(UserContext)
     const navigate = useNavigate();
 
     const handleChange = (e) => {
@@ -25,7 +26,10 @@ export default function LoginPage() {
             console.log(userInfo)
             localStorage.setItem("access", userInfo.access);
             localStorage.setItem("refresh", userInfo.refresh)
-            navigate("/");
+            if (userInfo) {
+                setLoggedIn(true)
+                navigate("/");
+            }
         } catch (error) {
             console.error("Login failed", error);
             setLoading(false); 

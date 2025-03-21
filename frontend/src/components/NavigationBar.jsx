@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
 import Toolbar from '@mui/material/Toolbar';
@@ -7,11 +7,12 @@ import Container from '@mui/material/Container';
 import WorkIcon from '@mui/icons-material/Work';
 import Button from '@mui/material/Button';
 import { useNavigate } from 'react-router-dom';
+import UserContext from '../context/UserContext';
 
 const pages = ['Job Search', 'Resources'];
 
 function NavigationBar() {
-    const [loggedIn, setLoggedIn] = useState(false); 
+    const {loggedIn, setLoggedIn} = useContext(UserContext) 
     const navigate = useNavigate();
 
     const handleLoginLogout = () => {
@@ -22,7 +23,6 @@ function NavigationBar() {
             navigate("/");
         } else {
             navigate("/login");
-            setLoggedIn(true);
         }
     };
 
