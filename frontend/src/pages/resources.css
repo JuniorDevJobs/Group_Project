@@ -1,0 +1,57 @@
+h1{
+    color: #44BBA4;
+    text-align: center; 
+}
+
+h3{
+    text-align:center; 
+}
+
+.parrot {
+    width: 30px; 
+    height: auto;
+    margin-right: 10px;
+    margin-bottom: 0px;
+}
+
+.ril{
+    color:#44BBA4;
+    position: sticky;
+    top: 0;
+    background-color: #393E41;
+    padding: 50px;
+    font-size: 30px;
+}
+
+.flex{
+    display:flex;
+    justify-content: space-around;
+    margin: -50px; 
+}
+
+img{
+    width: 300px; 
+    height: 175px;
+    object-fit: cover;
+    margin-bottom: 20px; 
+}
+
+.pic3{
+    object-fit: fill;
+
+}
+
+.resources{
+    display:flex; 
+    flex-direction: column; 
+}
+
+.interview{
+    display:flex; 
+    flex-direction: column; 
+}
+
+.linkedin{
+    display:flex; 
+    flex-direction: column; 
+}
