@@ -9,13 +9,11 @@ export default function JobSearch() {
         const storedJobs = localStorage.getItem("jobs");
         return storedJobs ? JSON.parse(storedJobs) : [];
     });
-    
-    const token = localStorage.getItem("access");
 
     const handleJobSearch = async (e) => {
         e.preventDefault();
 
-        const searchResults = await fetchJobs(location, token);
+        const searchResults = await fetchJobs(location);
         if (searchResults) {
             localStorage.setItem("jobs", JSON.stringify(searchResults.jobs));
             setResults(searchResults.jobs);

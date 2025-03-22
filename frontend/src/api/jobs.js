@@ -20,7 +20,7 @@ const payload = {
 }
 try {
   const body = await basicFetch(
-    `${apiUrl}/jobs/search/?job_title=developer&location=${location}`,
+    `${apiUrl}/jobs/search/?title=developer&location=${location}`,
     payload
   );
 
