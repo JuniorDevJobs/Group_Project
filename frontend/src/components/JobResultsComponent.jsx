@@ -1,7 +1,18 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 
 export default function Results({ results }) {
     const [showDescription, setShowDescription] = useState({});
+    const [isDarkMode, setIsDarkMode] = useState(false);
+
+    useEffect(() => {
+        const darkModeQuery = window.matchMedia('(prefers-color-scheme: dark)');
+        setIsDarkMode(darkModeQuery.matches);
+
+        const handleChange = (e) => setIsDarkMode(e.matches);
+        darkModeQuery.addEventListener('change', handleChange);
+
+        return () => darkModeQuery.removeEventListener('change', handleChange);
+    }, []);
 
     const toggleDescription = (index) => {
         setShowDescription(prevState => ({
@@ -48,7 +59,8 @@ export default function Results({ results }) {
                                         borderRadius: "5px",
                                         maxHeight: "200px", // Adjust this as needed for your design
                                         overflowY: "auto",  // Makes the content scrollable
-                                        backgroundColor: "#242323"
+                                        backgroundColor: isDarkMode ? "#242323" : "#f0f0f0", // Dynamic background color
+                                        color: isDarkMode ? "#ffffff" : "#000000"
                                     }}>
                                         <div
                                             dangerouslySetInnerHTML={{
