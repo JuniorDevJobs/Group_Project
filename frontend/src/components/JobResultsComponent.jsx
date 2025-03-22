@@ -26,7 +26,7 @@ export default function Results({ results }) {
                             }}>
                                 <div style={{ flexGrow: 1 }}>
                                     <div>
-                                        <strong>{job.title || "Junior Developer"}</strong> - {job.location}
+                                        <strong>{job.title || "Junior Developer"}</strong> - {job.location} <br />
                                         {job.company}
                                     </div>
 

@@ -25,12 +25,13 @@ export default function JobSearch() {
     };
 
     return (
-        <div className="page-container">
+        <div className="page-container"
+        style={{ paddingTop: "20px" }}
+        >
             <h2 style={{ textAlign: "center", color: "#44BBA4" }}>Job Search</h2>
 
             <Box
                 sx={{
-                    marginBottom: 3,
                     display: "flex",
                     alignItems: "center", // This aligns the TextField and Button in one row
                     gap: 2, // Adds space between the elements
@@ -60,7 +61,7 @@ export default function JobSearch() {
                 </Button>
             </Box>
 
-            <div style={{ maxHeight: "400px", overflowY: "auto", marginTop: "20px" }}>
+            <div style={{ maxHeight: "350px", overflowY: "auto" }}>
                 <Results results={results} />
             </div>
         </div>

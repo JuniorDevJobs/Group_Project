@@ -12,34 +12,34 @@ import UserContext from '../context/UserContext';
 const pages = ['Job Search', 'Resources'];
 
 function NavigationBar() {
-    const {loggedIn, setLoggedIn} = useContext(UserContext) 
+    const {loggedIn, setLoggedIn} = useContext(UserContext);
     const navigate = useNavigate();
 
     const handleLoginLogout = () => {
         if (loggedIn) {
             setLoggedIn(false);
-            localStorage.removeItem("access")
-            localStorage.removeItem("refresh")
+            localStorage.removeItem("access");
+            localStorage.removeItem("refresh");
             navigate("/");
         } else {
             navigate("/login");
         }
     };
 
-    const handleNavigate = (e) => {
-        navigate(`./${e.target.value}`);
+    const handleNavigate = (path) => {
+        navigate(path); // Navigate directly to the given path
     };
 
     return (
         <AppBar 
-            position="static" 
+            position="fixed" 
             sx={{ 
                 backgroundColor: '#6a4c9c', // Dark Lavender
                 borderRadius: '10px', // Rounded corners
                 overflow: 'hidden' // Prevents clipping of rounded corners
             }}
         >
-            <Container maxWidth="xl">
+            <Container maxWidth="false">
                 <Toolbar sx={{ display: 'flex', justifyContent: 'space-between', width: '100%' }}>
                     {/* Logo and Title */}
                     <Box sx={{ display: 'flex', alignItems: 'center', marginLeft: -2 }}>
@@ -47,7 +47,7 @@ function NavigationBar() {
                         <Typography
                             variant="h6"
                             component="a"
-                            value="home"
+                            onClick={() => handleNavigate('/')} // Navigate directly to home page
                             sx={{
                                 mr: 2,
                                 fontFamily: 'monospace',
@@ -56,6 +56,7 @@ function NavigationBar() {
                                 color: 'inherit',
                                 textDecoration: 'none',
                                 flexGrow: 1,
+                                cursor: 'pointer', // Ensure it's clickable
                             }}
                         >
                             JuniorDevJobs
@@ -66,8 +67,7 @@ function NavigationBar() {
                     <Box sx={{ display: 'flex', gap: 2 }}>
                         {pages.map((page) => (
                             <Button
-                                onClick={handleNavigate}
-                                value={page.split(" ").join("")}
+                                onClick={() => handleNavigate(`/${page.split(" ").join("")}`)} // Navigate based on page
                                 key={page}
                                 sx={{ color: 'white' }}
                             >
