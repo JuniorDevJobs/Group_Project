@@ -48,7 +48,7 @@ export default function Results({ results }) {
                                         borderRadius: "5px",
                                         maxHeight: "200px", // Adjust this as needed for your design
                                         overflowY: "auto",  // Makes the content scrollable
-                                        backgroundColor: "#f9f9f9"
+                                        backgroundColor: "#242323"
                                     }}>
                                         <div
                                             dangerouslySetInnerHTML={{
