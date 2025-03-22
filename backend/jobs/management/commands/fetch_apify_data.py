@@ -2,10 +2,13 @@ from jobs.models import IndeedJobListings
 import requests
 import time
 from django.core.management.base import BaseCommand
+from dotenv import load_dotenv
+import os
 
-APIFY_API_TOKEN = "apify_api_JeRbOtaooOMaBHJpalmHjJGzayDiBt2Kj1qJ"
+load_dotenv()
+
+APIFY_API_TOKEN = os.getenv("APIFY_API_TOKEN").strip()
 ACTOR_RUN_URL = f"https://api.apify.com/v2/acts/misceres~indeed-scraper/runs?token={APIFY_API_TOKEN}"
-
 
 class Command(BaseCommand):
     help = "Fetch job listings from Apify and update the database"
@@ -23,7 +26,7 @@ class Command(BaseCommand):
         payload = {
             "country": "US",
             "followApplyRedirects": False,
-            "maxItems": 1, # amount returned, update to higher numberber <= 900 when ready for production/ec2 instance
+            "maxItems": 1, # amount returned, update to higher number <= 900 when ready for production/ec2 instance
             "parseCompanyDetails": False,
             "position": "junior developer",
             "saveOnlyUniqueItems": True
@@ -71,7 +74,7 @@ class Command(BaseCommand):
 
         for item in data:
             IndeedJobListings.objects.create(
-                title=item.get("title", "N/A"),
+                title=item.get("positionName", "N/A"),
                 company=item.get("company", "N/A"),
                 location=item.get("location", "N/A"),
                 description=item.get("description", "No description available"),
