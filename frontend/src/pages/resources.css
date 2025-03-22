@@ -26,7 +26,7 @@ h3{
 .flex{
     display:flex;
     justify-content: space-around;
-    margin: -50px; 
+    /* margin: -50px;  */
 }
 
 img{
@@ -54,4 +54,20 @@ img{
 .linkedin{
     display:flex; 
     flex-direction: column; 
+}
+
+
+/* This ensures the page content has the same max-width as your navigation */
+.page-container {
+    max-width: 1200px; /* Set the max width to match your navigation width */
+    margin: 0 auto;    /* Centers the content horizontally */
+    padding: 20px;     /* Optional padding around the content */
+}
+
+/* Add this to ensure your content is responsive */
+@media (max-width: 1200px) {
+    .page-container {
+        width: 100%;
+        padding: 10px;  /* You can adjust padding for smaller screens */
+    }
 }

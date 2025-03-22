@@ -3,6 +3,7 @@ import './resources.css'
 export default function ResourcesPage() {
     return (
         <>
+        <div className="page-container">
         <h1>Resources</h1>
         <h2> <img class = "parrot" src = "https://cultofthepartyparrot.com/parrots/hd/laptop_parrot.gif"></img>Keepin' it RIL since 2025</h2>
         <h3> Click the images for external links 👽 🛸 </h3>
@@ -34,6 +35,7 @@ export default function ResourcesPage() {
                <a href = "https://contentdrips.com/blog/2024/12/want-to-make-your-linkedin-profile-stand-out-in-2025-heres-how/" target = "_blank"><img src = "https://contentdrips.com/wp-content/uploads/2024/12/Screenshot-2024-12-02-at-2.37.25-AM.png" alt = "linkedin5"></img></a>
 
                </div>
+        </div>
         </div>
         </>
     )

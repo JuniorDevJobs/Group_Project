@@ -1,4 +1,6 @@
+
 const apiUrl = "http://localhost:8000"
+const FINDWORK_API_KEY = import.meta.env.VITE_FINDWORK_API_KEY;
 
 async function basicFetch(url, payload) {
     const res = await fetch(url, payload)
@@ -6,16 +8,26 @@ async function basicFetch(url, payload) {
     return body
   }
 
-export async function fetchJobs(location, token) {
+export async function fetchJobs(location) {
 console.log(location)
 const payload = {
-    method: "POST",
+    method: "GET",
     headers: {
     "Content-Type": "application/json",
+    "Authorization": `Token ${FINDWORK_API_KEY}`
     },
     //expecting a list of results
 }
-const body = await basicFetch(`${apiUrl}/jobs/search/?job_title=developer&location=${location}`,payload)
-console.log(body)
-return body
+try {
+  const body = await basicFetch(
+    `${apiUrl}/jobs/search/?job_title=developer&location=${location}`,
+    payload
+  );
+
+  console.log(body);
+  return body;
+} catch (error) {
+  console.error("Error fetching jobs:", error);
+  return null;
+}
 }
