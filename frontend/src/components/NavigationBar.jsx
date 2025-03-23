@@ -20,6 +20,7 @@ function NavigationBar() {
             setLoggedIn(false);
             localStorage.removeItem("access");
             localStorage.removeItem("refresh");
+            localStorage.removeItem("jobs")
             navigate("/");
         } else {
             navigate("/login");

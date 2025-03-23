@@ -26,9 +26,12 @@ export default function JobSearch() {
         e.preventDefault();
 
         const searchResults = await fetchJobs(location);
-        if (searchResults) {
+        if (searchResults.jobs) {
             localStorage.setItem("jobs", JSON.stringify(searchResults.jobs));
             setResults(searchResults.jobs);
+        } else {
+            localStorage.setItem("jobs", JSON.stringify(searchResults.cached_jobs))
+            setResults(searchResults.cached_jobs)
         }
     };
 
