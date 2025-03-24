@@ -3,6 +3,7 @@ from rest_framework.views import APIView
 from rest_framework.generics import CreateAPIView, DestroyAPIView
 from rest_framework.response import Response
 from rest_framework.permissions import AllowAny, IsAuthenticated
+from rest_framework_simplejwt.authentication import JWTAuthentication
 from rest_framework import status
 from .serializers import SignupSerializer
 from django.contrib.auth import get_user_model
@@ -21,6 +22,7 @@ class SignupView(CreateAPIView):
 
 
 class DeleteUserView(APIView):
+    authentication_classes = [JWTAuthentication]
     permission_classes = [IsAuthenticated]
 
     def delete(self, request):
