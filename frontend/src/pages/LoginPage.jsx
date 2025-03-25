@@ -9,6 +9,7 @@ export default function LoginPage() {
     const [loading, setLoading] = useState(false);
     const [formData, setFormData] = useState({ username: "", password: "" });
     const {setLoggedIn} = useContext(UserContext)
+    const [error, setError]=useState("")
     const navigate = useNavigate();
 
     const handleChange = (e) => {
@@ -24,8 +25,15 @@ export default function LoginPage() {
         try {
             const userInfo = await login(formData);
             console.log(userInfo)
+            if (userInfo.detail) {
+                setError("No account with those credentials. Try Again")
+                setLoading(false)
+                return
+            }
             localStorage.setItem("access", userInfo.access);
             localStorage.setItem("refresh", userInfo.refresh)
+            localStorage.setItem("username",formData.username)
+
             if (userInfo) {
                 setLoggedIn(true)
                 navigate("/");
@@ -43,6 +51,7 @@ export default function LoginPage() {
     return (
         <Paper square={false} elevation={4}>
             <h3>Login</h3>
+            {error}
             <Box
                 component="form"
                 onSubmit={handleLogin}

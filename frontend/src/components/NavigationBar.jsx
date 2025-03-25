@@ -9,7 +9,7 @@ import Button from '@mui/material/Button';
 import { useNavigate } from 'react-router-dom';
 import UserContext from '../context/UserContext';
 
-const pages = ['Job Search', 'Resources'];
+const pages = ['Profile','Job Search', 'Resources'];
 
 function NavigationBar() {
     const {loggedIn, setLoggedIn} = useContext(UserContext);
@@ -21,6 +21,7 @@ function NavigationBar() {
             localStorage.removeItem("access");
             localStorage.removeItem("refresh");
             localStorage.removeItem("jobs")
+            localStorage.removeItem("username")
             navigate("/");
         } else {
             navigate("/login");

@@ -43,6 +43,10 @@ export default function JobSearch() {
         <div 
             className="page-container"
             style={{ 
+                minWidth:"800px",
+                maxWidth: "800px",  // Prevents growing beyond this width
+                width: "100%",  // Ensures it is responsive but constrained
+                margin: "0 auto",
                 paddingTop: "20px",
                 backgroundColor: isDarkMode ? "#121212" : "#f4f4f4", 
                 color: isDarkMode ? "#ffffff" : "#000000", 
