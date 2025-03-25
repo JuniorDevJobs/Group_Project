@@ -1,5 +1,5 @@
 
-const apiUrl = "http://localhost:8000"
+const apiUrl = "http://localhost:8090/web"
 const FINDWORK_API_KEY = import.meta.env.VITE_FINDWORK_API_KEY;
 
 async function basicFetch(url, payload) {

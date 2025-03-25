@@ -46,13 +46,13 @@ class UpdateUserView(APIView):
 
         # check if email in request body
         if not updated_email:
-            raise ValidationError({"error": "please input valid email"}, status=status.HTTP_400_BAD_REQUEST)
+            return Response({"message": "please input valid email"}, status=status.HTTP_400_BAD_REQUEST)
         
         # check if a valid email format
         try:
             validate_email(updated_email)
         except ValidationError:
-            return Response({"error": "Invalid email format."}, status=status.HTTP_400_BAD_REQUEST)
+            return Response({"message": "Invalid email format."}, status=status.HTTP_400_BAD_REQUEST)
 
 
         user.email = updated_email
