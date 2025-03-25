@@ -3,13 +3,15 @@ import { useContext, useState } from "react"
 import { deleteUser } from "../api/usersApi";
 import { useNavigate } from "react-router-dom";
 import UserContext from "../context/UserContext";
-
+import { updateUser } from "../api/usersApi";
 export default function Profile() {
     const [username, setUsername] = useState(localStorage.getItem("username"))
     const [open, setOpen]=useState (false)
     const [email, setEmail]=useState("")
     const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
     const {loggedin, setLoggedIn} = useContext(UserContext)
+    const token = localStorage.getItem("access");
+
     const navigate = useNavigate()
     if (!username){
         return "Login to view profile"
@@ -22,10 +24,12 @@ export default function Profile() {
         setOpen(false);
     };
 
-    const handleSave = () => {
-        // add updateUser function
-        console.log("New Email:", email);
+    const handleSave = async (e) => {
+        e.preventDefault()
+        const context = {"email": email}
+        const response = await updateUser(context, token)
         setOpen(false);
+        alert(response.message)
     };
 
 
@@ -38,13 +42,14 @@ export default function Profile() {
     };
 
     const handleDeleteConfirm = async () => {
-        const token = localStorage.getItem("access");
     
         try {
             // Call deleteUser function
             const response = await deleteUser(token);
             
             // Notify the user and navigate after successful deletion
+            localStorage.clear()
+            setLoggedIn(false)
             alert(response); // You can replace alert with a proper UI notification
             navigate("/"); // Navigate to home after successful deletion
         } catch (error) {

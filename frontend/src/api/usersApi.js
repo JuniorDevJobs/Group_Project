@@ -32,3 +32,21 @@ export async function deleteUser(token) {
   console.log("Response Body:", body);
   return body;  // You can adjust this depending on the response format
 }
+
+
+
+
+
+export async function updateUser(context, token) {
+    console.log(context)
+    const payload = {
+      method: "PATCH",
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": `Bearer ${token}`
+      },
+      body: JSON.stringify(context)
+    }
+    const body = await basicFetch(`${apiUrl}/accounts/update-user/`,payload)
+    return body
+  }
