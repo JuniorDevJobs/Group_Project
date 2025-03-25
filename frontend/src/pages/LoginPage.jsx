@@ -26,6 +26,7 @@ export default function LoginPage() {
             console.log(userInfo)
             localStorage.setItem("access", userInfo.access);
             localStorage.setItem("refresh", userInfo.refresh)
+            localStorage.setItem("username",formData.username)
             if (userInfo) {
                 setLoggedIn(true)
                 navigate("/");

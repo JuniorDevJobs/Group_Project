@@ -7,6 +7,7 @@ import HomePage from './pages/HomePage'
 import JobSearch from './pages/JobSearch'
 import ResourcesPage from './pages/ResourcesPage'
 import { UserProvider } from './context/UserContext'
+import Profile from './pages/ProfilePage'
 function App() {
 
   return (
@@ -18,6 +19,7 @@ function App() {
           <Route path="/" element= {<HomePage />} />
           <Route path="/home" element= {<HomePage />} />
           <Route path="/login" element={<LoginPage />}/>
+          <Route path="/profile" element={<Profile />} />
           <Route path="/signup" element = {<SignUpPage />} />
           <Route path="/JobSearch" element={<JobSearch />} />
           <Route path="/Resources" element={<ResourcesPage />} />
