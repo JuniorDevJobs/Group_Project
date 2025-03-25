@@ -26,7 +26,7 @@ class Command(BaseCommand):
         payload = {
             "country": "US",
             "followApplyRedirects": False,
-            "maxItems": 1, # amount returned, update to higher number <= 900 when ready for production/ec2 instance
+            "maxItems": 0, # amount returned, update to higher number <= 900 when ready for production/ec2 instance
             "parseCompanyDetails": False,
             "position": "junior developer",
             "saveOnlyUniqueItems": True

@@ -26,4 +26,4 @@ celery -A backend_proj.celery worker --detach --loglevel=info
 # Run the Apify data fetch **immediately** on startup to fill database
 python manage.py fetch_apify_data
 
-python manage.py runserver 0.0.0.0:8000
+# python manage.py runserver 0.0.0.0:8000
