@@ -7,16 +7,15 @@ async function basicFetch(url, payload) {
   }
   
   
-  export async function deleteUser(context, token) {
-    console.log(token)
+  export async function deleteUser(token) {
     const payload = {
       method: "DELETE",
       headers: {
         "Content-Type": "application/json",
         "Authorization": `Bearer ${token}`
       },
-      body: JSON.stringify(context)
     }
+    console.log("Authorization Header:", payload.headers.Authorization);
     const body = await basicFetch(`${apiUrl}/accounts/delete-user/`,payload)
     return body
   }

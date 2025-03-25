@@ -36,9 +36,9 @@ export default function Profile() {
     };
 
     const handleDeleteConfirm = async () => {
-        const userToken = localStorage.getItem("access")
-        const context = {"user": userToken}
-        const response = await deleteUser(context, userToken)
+        const token = localStorage.getItem("access")
+      
+        const response = await deleteUser(token)
 
         return (
             {response}
