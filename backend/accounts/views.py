@@ -9,6 +9,7 @@ from .serializers import SignupSerializer
 from django.contrib.auth import get_user_model
 from rest_framework.exceptions import ValidationError
 
+
 User = get_user_model()
 class SignupView(CreateAPIView):
     serializer_class = SignupSerializer
@@ -31,3 +32,21 @@ class DeleteUserView(APIView):
             raise ValidationError({"error": "User not found"})
         user.delete()
         return Response({"message": "User deleted successfully."}, status=status.HTTP_204_NO_CONTENT)
+
+
+class UpdateUserView(APIView):
+    authentication_classes = [JWTAuthentication]
+    permission_classes = [IsAuthenticated]
+
+    def patch(self, request):
+        user = request.user
+        former_email = user.email
+        updated_email = request.data['email']
+
+        if not updated_email:
+            raise ValidationError({"error": "please input valid email"})
+        
+        user.email = updated_email
+        user.save()
+        return Response({"message": f"user email changed from {former_email} to {user.email}"})
+
