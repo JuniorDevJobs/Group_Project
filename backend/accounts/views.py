@@ -8,7 +8,8 @@ from rest_framework import status
 from .serializers import SignupSerializer
 from django.contrib.auth import get_user_model
 from rest_framework.exceptions import ValidationError
-
+from django.core.validators import validate_email
+from django.core.exceptions import ValidationError
 
 User = get_user_model()
 class SignupView(CreateAPIView):
@@ -43,9 +44,17 @@ class UpdateUserView(APIView):
         former_email = user.email
         updated_email = request.data['email']
 
+        # check if email in request body
         if not updated_email:
-            raise ValidationError({"error": "please input valid email"})
+            raise ValidationError({"error": "please input valid email"}, status=status.HTTP_400_BAD_REQUEST)
         
+        # check if a valid email format
+        try:
+            validate_email(updated_email)
+        except ValidationError:
+            return Response({"error": "Invalid email format."}, status=status.HTTP_400_BAD_REQUEST)
+
+
         user.email = updated_email
         user.save()
         return Response({"message": f"user email changed from {former_email} to {user.email}"})
