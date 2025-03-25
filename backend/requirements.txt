@@ -17,6 +17,7 @@ django-timezone-field==7.1
 djangorestframework==3.15.2
 djangorestframework_simplejwt==5.5.0
 dotenv==0.9.9
+gunicorn==23.0.0
 idna==3.10
 kombu==5.5.0
 prompt_toolkit==3.0.50
