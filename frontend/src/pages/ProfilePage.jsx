@@ -9,6 +9,7 @@ export default function Profile() {
     const [open, setOpen]=useState (false)
     const [email, setEmail]=useState("")
     const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
+    const [error, setError]=useState("")
     const {loggedin, setLoggedIn} = useContext(UserContext)
     const token = localStorage.getItem("access");
 
@@ -26,9 +27,14 @@ export default function Profile() {
 
     const handleSave = async (e) => {
         e.preventDefault()
+        if (!email) {
+            setError("Must provide new email to update")
+            return
+        }
         const context = {"email": email}
         const response = await updateUser(context, token)
         setOpen(false);
+        setError("")
         alert(response.message)
     };
 
@@ -65,11 +71,12 @@ export default function Profile() {
         </Avatar> {username}
         </div>
         <br/>
-
+        
         <Button variant="contained" onClick={handleOpen}>Update Contact</Button>
         <Dialog open={open} onClose={handleClose}>
                 <DialogTitle>Update Email</DialogTitle>
                 <DialogContent>
+                    {error}
                     <TextField
                         autoFocus
                         margin="dense"
