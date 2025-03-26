@@ -10,6 +10,9 @@ from django.contrib.auth import get_user_model
 from rest_framework.exceptions import ValidationError
 from django.core.validators import validate_email
 from django.core.exceptions import ValidationError
+from jobs.models import JobSearch
+from django.core.serializers import serialize
+import json
 
 User = get_user_model()
 class SignupView(CreateAPIView):
@@ -58,4 +61,15 @@ class UpdateUserView(APIView):
         user.email = updated_email
         user.save()
         return Response({"message": f"user email changed from {former_email} to {user.email}"})
+
+class GetSearchData(APIView):
+    authentication_classes = [JWTAuthentication]
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request):
+        jobs = JobSearch.objects.get()
+        jobs_serialized = serialize("json", jobs)
+        jobs_json = json.loads(jobs_serialized)
+
+        return Response(jobs_json)
 

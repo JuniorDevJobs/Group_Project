@@ -1,7 +1,8 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useContext } from "react";
 import { TextField, Button, Box } from "@mui/material";
 import Results from "../components/JobResultsComponent";
 import { fetchJobs } from "../api/jobs";
+import UserContext from "../context/UserContext"
 
 export default function JobSearch() {
     const [location, setLocation] = useState("");
@@ -12,6 +13,10 @@ export default function JobSearch() {
         return storedJobs ? JSON.parse(storedJobs) : [];
     });
 
+    const {savedJobs, setSavedJobs } = useContext(UserContext)
+
+    const token = localStorage.getItem("access")
+    
     useEffect(() => {
         // Detect system preference for dark mode
         const darkModeQuery = window.matchMedia('(prefers-color-scheme: dark)');
@@ -26,7 +31,7 @@ export default function JobSearch() {
     const handleJobSearch = async (e) => {
         e.preventDefault();
         const context = {"location": location, "title": title}
-        const searchResults = await fetchJobs(context);
+        const searchResults = await fetchJobs(context, token);
         if (searchResults.jobs) {
             localStorage.setItem("jobs", JSON.stringify(searchResults.jobs));
             setResults(searchResults.jobs);
