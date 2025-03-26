@@ -49,8 +49,7 @@ export async function updateUser(context, token) {
   }
 
 
-  export async function getSearches() {
-    pass
+export async function getSearches(token) {
     const payload = {
       method: "GET",
       headers: {
@@ -58,5 +57,6 @@ export async function updateUser(context, token) {
         "Authorization": `Bearer ${token}`
       },
     }
-    body = await basicFetch(`${apiUrl}/accounts/get-searches/`,payload)
-  }
+    const body = await basicFetch(`${apiUrl}/accounts/get-searches/`, payload)
+    return body
+}

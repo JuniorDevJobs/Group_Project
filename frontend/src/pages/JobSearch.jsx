@@ -12,6 +12,10 @@ export default function JobSearch() {
         const storedJobs = localStorage.getItem("jobs");
         return storedJobs ? JSON.parse(storedJobs) : [];
     });
+    const [userData, setUserData] = useState(() => {
+        const storedUserData = localStorage.getItem("userData");
+        return storedUserData ? JSON.parse(storedUserData) : null;
+    });
 
     const {savedJobs, setSavedJobs } = useContext(UserContext)
 
@@ -25,19 +29,35 @@ export default function JobSearch() {
         const handleChange = (e) => setIsDarkMode(e.matches);
         darkModeQuery.addEventListener('change', handleChange);
 
+        // Set saved jobs from user data if available
+        if (userData && userData.saved_jobs) {
+            setSavedJobs(userData.saved_jobs);
+        }
+
         return () => darkModeQuery.removeEventListener('change', handleChange);
-    }, []);
+    }, [userData, setSavedJobs]);
 
     const handleJobSearch = async (e) => {
         e.preventDefault();
-        const context = {"location": location, "title": title}
-        const searchResults = await fetchJobs(context, token);
-        if (searchResults.jobs) {
-            localStorage.setItem("jobs", JSON.stringify(searchResults.jobs));
-            setResults(searchResults.jobs);
-        } else {
-            localStorage.setItem("jobs", JSON.stringify(searchResults.cached_jobs))
-            setResults(searchResults.cached_jobs)
+        const context = {
+            "location": location, 
+            "title": title,
+            "userPreferences": userData?.preferences || {}
+        };
+        try {
+            const searchResults = await fetchJobs(context, token);
+            if (searchResults.jobs) {
+                localStorage.setItem("jobs", JSON.stringify(searchResults.jobs));
+                setResults(searchResults.jobs);
+            } else if (searchResults.cached_jobs) {
+                localStorage.setItem("jobs", JSON.stringify(searchResults.cached_jobs));
+                setResults(searchResults.cached_jobs);
+            } else {
+                setResults([]);
+            }
+        } catch (error) {
+            console.error("Error fetching jobs:", error);
+            setResults([]);
         }
     };
 
@@ -65,6 +85,15 @@ export default function JobSearch() {
             }}
         >
             <h2 style={{ textAlign: "center", color: "#44BBA4" }}>Job Search</h2>
+            {userData && (
+                <div style={{ 
+                    textAlign: "center", 
+                    marginBottom: "20px",
+                    color: isDarkMode ? "#ffffff" : "#000000"
+                }}>
+                    Welcome, {userData.username}!
+                </div>
+            )}
 
             <Box
                 sx={{

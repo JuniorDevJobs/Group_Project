@@ -30,9 +30,16 @@ export default function LoginPage() {
                 setLoading(false)
                 return
             }
+            
             localStorage.setItem("access", userInfo.access);
-            localStorage.setItem("refresh", userInfo.refresh)
-            localStorage.setItem("username",formData.username)
+            localStorage.setItem("refresh", userInfo.refresh);
+            localStorage.setItem("username", formData.username);
+            localStorage.setItem("userData", JSON.stringify({
+                username: formData.username,
+                email: userInfo.email || "",
+                preferences: userInfo.preferences || {},
+                savedJobs: userInfo.saved_jobs || []
+            }));
 
             if (userInfo) {
                 setLoggedIn(true)
@@ -85,7 +92,7 @@ export default function LoginPage() {
                     <Button
                         type="submit"
                         variant="contained"
-                        disabled={loading} // Disable button while loading
+                        disabled={loading}
                     >
                         {loading ? "Logging in..." : "Submit"}
                     </Button>
