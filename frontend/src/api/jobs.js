@@ -8,8 +8,8 @@ async function basicFetch(url, payload) {
     return body
   }
 
-export async function fetchJobs(location) {
-console.log(location)
+export async function fetchJobs(context) {
+console.log(context.location)
 const payload = {
     method: "GET",
     headers: {
@@ -18,16 +18,31 @@ const payload = {
     },
     //expecting a list of results
 }
-try {
-  const body = await basicFetch(
-    `${apiUrl}/jobs/search/?title=developer&location=${location}`,
-    payload
-  );
-
-  console.log(body);
-  return body;
+let body
+try { 
+  if (context.location && context.title){
+    const body = await basicFetch(
+      `${apiUrl}/jobs/search/?title=${context.title}&location=${context.location}`,
+      payload
+    );
+    console.log("Location and title:" ,body);
+    return body
+} else if (!context.title) {
+    const body = await basicFetch(
+      `${apiUrl}/jobs/search/?title=developer&location=${context.location}`,
+      payload);
+      console.log("Location only:" ,body);
+      return body
+  }else if (!context.location) {
+    const body = await basicFetch(
+      `${apiUrl}/jobs/search/?title=${context.title}&location=USA`,
+      payload);
+      console.log("Title only:" ,body);
+      return body
+  }
 } catch (error) {
   console.error("Error fetching jobs:", error);
   return null;
 }
 }
+

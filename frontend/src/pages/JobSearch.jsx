@@ -5,6 +5,7 @@ import { fetchJobs } from "../api/jobs";
 
 export default function JobSearch() {
     const [location, setLocation] = useState("");
+    const [title, setTitle] = useState("");
     const [isDarkMode, setIsDarkMode] = useState(false);
     const [results, setResults] = useState(() => {
         const storedJobs = localStorage.getItem("jobs");
@@ -24,8 +25,8 @@ export default function JobSearch() {
 
     const handleJobSearch = async (e) => {
         e.preventDefault();
-
-        const searchResults = await fetchJobs(location);
+        const context = {"location": location, "title": title}
+        const searchResults = await fetchJobs(context);
         if (searchResults.jobs) {
             localStorage.setItem("jobs", JSON.stringify(searchResults.jobs));
             setResults(searchResults.jobs);
@@ -35,9 +36,13 @@ export default function JobSearch() {
         }
     };
 
-    const handleChange = (e) => {
+    const handleLocationChange = (e) => {
         setLocation(e.target.value);
     };
+
+    const handleTitleChange = (e) => {
+        setTitle(e.target.value);
+    }
 
     return (
         <div 
@@ -77,8 +82,34 @@ export default function JobSearch() {
                     name="location"
                     placeholder="Job Location"
                     value={location}
-                    onChange={handleChange}
+                    onChange={handleLocationChange}
                     helperText="Enter City, State Abbreviation, or Remote"
+                    fullWidth
+                    sx={{ 
+                        maxWidth: 400,
+                        input: { 
+                            color: isDarkMode ? "#ffffff" : "#000000",
+                        },
+                        label: { 
+                            color: isDarkMode ? "#bbbbbb" : "#555555" 
+                        },
+                        fieldset: { 
+                            borderColor: isDarkMode ? "##00897B" : "#ccc" 
+                        },
+                        "& .MuiInputBase-root": {
+                            backgroundColor: isDarkMode ? "#333333" : "#ffffff"
+                        }
+                    }} 
+                />
+                <TextField
+                    required
+                    id="title"
+                    label="title"
+                    name="title"
+                    placeholder="Job Title"
+                    value={title}
+                    onChange={handleTitleChange}
+                    helperText="Enter job position name"
                     fullWidth
                     sx={{ 
                         maxWidth: 400,
@@ -113,7 +144,7 @@ export default function JobSearch() {
                 </Button>
             </Box>
 
-            <div style={{ maxHeight: "350px", overflowY: "auto" }}>
+            <div style={{ maxHeight: "auto", overflowY: "1000px" }}>
                 <Results results={results} />
             </div>
         </div>
