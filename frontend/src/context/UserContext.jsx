@@ -11,7 +11,6 @@ export const UserProvider = ({ children }) => {
         const token = localStorage.getItem("access");
         if (token) {
             setLoggedIn(true);
-            fetchSavedJobs(token)
         }
     }, []);
 
@@ -26,7 +25,7 @@ export const UserProvider = ({ children }) => {
     }
 
     return (
-        <UserContext.Provider value={{ loggedIn, setLoggedIn, savedjobs, setsavedjobs}}>
+        <UserContext.Provider value={{ loggedIn, setLoggedIn, savedjobs, setsavedjobs, fetchSavedJobs}}>
             {children}
         </UserContext.Provider>
     );

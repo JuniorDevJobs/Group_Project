@@ -8,7 +8,7 @@ import UserContext from "../context/UserContext";
 export default function LoginPage() {
     const [loading, setLoading] = useState(false);
     const [formData, setFormData] = useState({ username: "", password: "" });
-    const {setLoggedIn} = useContext(UserContext)
+    const {setLoggedIn, fetchSavedJobs, token} = useContext(UserContext)
     const [error, setError]=useState("")
     const navigate = useNavigate();
 
@@ -33,9 +33,12 @@ export default function LoginPage() {
             localStorage.setItem("access", userInfo.access);
             localStorage.setItem("refresh", userInfo.refresh)
             localStorage.setItem("username",formData.username)
-
+            const token = localStorage.getItem("access");
             if (userInfo) {
                 setLoggedIn(true)
+                console.log("fetching saved jobs...")
+                fetchSavedJobs(token)
+                console.log("jobs fetched")
                 navigate("/");
             }
         } catch (error) {
