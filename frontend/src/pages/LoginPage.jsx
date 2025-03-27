@@ -8,7 +8,7 @@ import UserContext from "../context/UserContext";
 export default function LoginPage() {
     const [loading, setLoading] = useState(false);
     const [formData, setFormData] = useState({ username: "", password: "" });
-    const {setLoggedIn, fetchSavedJobs} = useContext(UserContext)
+    const {setLoggedIn} = useContext(UserContext)
     const [error, setError]=useState("")
     const navigate = useNavigate();
 
@@ -43,7 +43,6 @@ export default function LoginPage() {
 
             if (userInfo) {
                 setLoggedIn(true)
-                fetchSavedJobs(token)
                 navigate("/");
             }
         } catch (error) {

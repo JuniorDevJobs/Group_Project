@@ -17,7 +17,7 @@ export default function JobSearch() {
         return storedUserData ? JSON.parse(storedUserData) : null;
     });
 
-    const {savedJobs, setSavedJobs } = useContext(UserContext)
+    const {savedJobs, setSavedJobs, fetchSavedJobs } = useContext(UserContext)
 
     const token = localStorage.getItem("access")
     
@@ -37,6 +37,7 @@ export default function JobSearch() {
         return () => darkModeQuery.removeEventListener('change', handleChange);
     }, [userData, setSavedJobs]);
 
+
     const handleJobSearch = async (e) => {
         e.preventDefault();
         const context = {
@@ -49,10 +50,13 @@ export default function JobSearch() {
             if (searchResults.jobs) {
                 localStorage.setItem("jobs", JSON.stringify(searchResults.jobs));
                 setResults(searchResults.jobs);
+                fetchSavedJobs()
             } else if (searchResults.cached_jobs) {
                 localStorage.setItem("jobs", JSON.stringify(searchResults.cached_jobs));
+                fetchSavedJobs()
                 setResults(searchResults.cached_jobs);
             } else {
+                console.log(searchResults)
                 setResults([]);
             }
         } catch (error) {

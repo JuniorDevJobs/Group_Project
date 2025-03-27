@@ -57,6 +57,18 @@ export async function getSearches(token) {
         "Authorization": `Bearer ${token}`
       },
     }
-    const const body = await basicFetch(`${apiUrl}/accounts/get-searches/`, payload)
-    return body
+    
+    try {
+      const response = await fetch(`${apiUrl}/accounts/get-searches/`, payload);
+      if (!response.ok) {
+          console.error("Error fetching searches:", response.status, response.statusText);
+          return null;
+      }
+      const body = await response.json();
+      console.log("Jobs Response:", body);
+      return body;
+  } catch (error) {
+      console.error("Fetch error:", error);
+      return null;
+  }
 }
