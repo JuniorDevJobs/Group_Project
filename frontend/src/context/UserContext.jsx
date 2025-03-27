@@ -15,6 +15,7 @@ export const UserProvider = ({ children }) => {
     }, []);
 
     async function fetchSavedJobs(token) {
+        console.log("fetching saved jobs")
         try {
             const jobs = await getSearches(token);
             console.log(jobs)
