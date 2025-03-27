@@ -1,8 +1,14 @@
 from rest_framework import serializers
 from django.contrib.auth import get_user_model
 from django.core.exceptions import ValidationError
+from jobs.models import JobSearch
 
 User = get_user_model()
+
+class UserDataSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = User
+        fields = ['username', 'email']
 
 class SignupSerializer(serializers.ModelSerializer):
     password = serializers.CharField(write_only=True)
