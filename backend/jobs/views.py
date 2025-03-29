@@ -22,7 +22,7 @@ APIFY_API_TOKEN = os.getenv("APIFY_API_TOKEN").strip()
 ACTOR_RUN_URL = f"https://api.apify.com/v2/acts/misceres~indeed-scraper/runs?token={APIFY_API_TOKEN}"
 
 @api_view(['GET'])
-@authentication_classes([JWTAuthentication])  # Check for JWT token but don't require it
+# @authentication_classes([JWTAuthentication])  # Check for JWT token only if you want search to be login only
 @permission_classes([])  # Allow public access
 def search_jobs(request):
     title = request.GET.get("title", "").strip().lower()
