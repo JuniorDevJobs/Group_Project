@@ -65,7 +65,6 @@ export async function getSearches(token) {
           return null;
       }
       const body = await response.json();
-      console.log("Jobs Response:", body);
       return body;
   } catch (error) {
       console.error("Fetch error:", error);

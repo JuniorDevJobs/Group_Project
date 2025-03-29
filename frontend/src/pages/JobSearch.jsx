@@ -8,19 +8,55 @@ export default function JobSearch() {
     const [location, setLocation] = useState("");
     const [title, setTitle] = useState("");
     const [isDarkMode, setIsDarkMode] = useState(false);
+    
+    const token = localStorage.getItem("access")
+    const {setSavedJobs, savedJobs, fetchSavedJobs } = useContext(UserContext)
+    
+
     const [results, setResults] = useState(() => {
-        const storedJobs = localStorage.getItem("jobs");
-        return storedJobs ? JSON.parse(storedJobs) : [];
+        try {
+            const storedJobs = localStorage.getItem("storedJobs");
+            return storedJobs ? JSON.parse(storedJobs) : [];
+        } catch (error) {
+            console.error("Error parsing stored jobs:", error);
+            return []; // Fallback to empty array
+        }
     });
+
     const [userData, setUserData] = useState(() => {
         const storedUserData = localStorage.getItem("userData");
         return storedUserData ? JSON.parse(storedUserData) : null;
     });
 
-    const {savedJobs, setSavedJobs, fetchSavedJobs } = useContext(UserContext)
-
-    const token = localStorage.getItem("access")
     
+    if (results) {
+        
+        console.log("Results", results)
+    } else {console.log("NOT RESULTS")}
+    
+    useEffect(() => {
+        async function loadJobs() {
+            try {
+                const fetchedJobs = await fetchSavedJobs(token);
+                localStorage.setItem("storedJobs", JSON.stringify(fetchedJobs));
+                setResults(fetchedJobs);
+            } catch (error) {
+                console.error("Error fetching saved jobs:", error);
+                setResults([]); // Ensure results is always an array
+            }
+        }
+    
+        if (!localStorage.getItem("storedJobs")) {
+            loadJobs();
+        }
+    }, [token, fetchSavedJobs]);
+    
+    // Log results *after* it's updated
+    // useEffect(() => {
+    //     console.log("Updated Results:", results);
+    // }, [results]);
+
+
     useEffect(() => {
         // Detect system preference for dark mode
         const darkModeQuery = window.matchMedia('(prefers-color-scheme: dark)');
@@ -48,12 +84,12 @@ export default function JobSearch() {
         try {
             const searchResults = await fetchJobs(context, token);
             if (searchResults.jobs) {
-                localStorage.setItem("jobs", JSON.stringify(searchResults.jobs));
+                localStorage.setItem("storedJobs", JSON.stringify(searchResults.jobs));
                 setResults(searchResults.jobs);
-                fetchSavedJobs()
+                
             } else if (searchResults.cached_jobs) {
-                localStorage.setItem("jobs", JSON.stringify(searchResults.cached_jobs));
-                fetchSavedJobs()
+                localStorage.setItem("storedJobs", JSON.stringify(searchResults.cached_jobs));
+                
                 setResults(searchResults.cached_jobs);
             } else {
                 console.log(searchResults)
@@ -183,7 +219,7 @@ export default function JobSearch() {
             </Box>
 
             <div style={{ maxHeight: "auto", overflowY: "1000px" }}>
-                <Results results={results} />
+            <Results results={Array.isArray(results) && results.length > 0 ? results : (Array.isArray(savedJobs) ? savedJobs : [])} />
             </div>
         </div>
     );

@@ -24,19 +24,16 @@ try {
       `${apiUrl}/jobs/search/?title=${context.title}&location=${context.location}`,
       payload
     );
-    console.log("Location and title:" ,body);
     return body
 } else if (!context.title) {
     const body = await basicFetch(
       `${apiUrl}/jobs/search/?title=developer&location=${context.location}`,
       payload);
-      console.log("Location only:" ,body);
       return body
   }else if (!context.location) {
     const body = await basicFetch(
       `${apiUrl}/jobs/search/?title=${context.title}&location=USA`,
       payload);
-      console.log("Title only:" ,body);
       return body
   }
 } catch (error) {

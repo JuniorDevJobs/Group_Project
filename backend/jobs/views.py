@@ -71,6 +71,7 @@ def search_jobs(request):
             logger.info("User is not authenticated, job search will not be saved.")
         else:
             logger.info(f"Saving job search for user: {user.username}, title: {title}, location: {location}")
+            JobSearch.objects.filter(user=user).delete() # delete old data under user
             for job in findwork_jobs:
                 try:
                     job_search = JobSearch.objects.create(

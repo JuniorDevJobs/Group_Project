@@ -17,13 +17,15 @@ export const UserProvider = ({ children }) => {
             console.error("No token found in localStorage!");
         }
     }, [loggedIn]);
+    
     async function fetchSavedJobs() {
         const token = localStorage.getItem("access")
         try {
             const jobs = await getSearches(token);
             console.log("Jobs:", jobs)
             setsavedjobs(jobs);
-            console.log("Updated savedjobs state:", savedjobs)
+            localStorage.setItem("storedJobs",JSON.stringify(jobs))
+            console.log("Updated savedJobs state will change soon...")
         } catch (error) {
             console.error("Error fetching saved jobs:", error);
         }
