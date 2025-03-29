@@ -24,6 +24,7 @@ function NavigationBar() {
             // localStorage.removeItem("jobs")
             // localStorage.removeItem("username");
             // localStorage.removeItem("userData");
+            localStorage.removeItem("storedJobs")
             navigate("/");
         } else {
             navigate("/login");
