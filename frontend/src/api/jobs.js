@@ -9,12 +9,15 @@ async function basicFetch(url, payload) {
 
 export async function fetchJobs(context,token) {
 console.log(context.location)
+const headers = {
+  "Content-Type": "application/json",
+};
+if (token){
+  headers["Authorization"] = `Bearer ${token}`; // check if token so the search is saved
+}
 const payload = {
     method: "GET",
-    headers: {
-    "Content-Type": "application/json",
-    "Authorization": `Bearer ${token}`
-    },
+    headers: headers
     //expecting a list of results
 }
 let body
