@@ -1,15 +1,61 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useContext } from "react";
 import { TextField, Button, Box } from "@mui/material";
 import Results from "../components/JobResultsComponent";
 import { fetchJobs } from "../api/jobs";
+import UserContext from "../context/UserContext"
 
 export default function JobSearch() {
     const [location, setLocation] = useState("");
+    const [title, setTitle] = useState("");
     const [isDarkMode, setIsDarkMode] = useState(false);
+    
+    const token = localStorage.getItem("access")
+    const {setSavedJobs, savedJobs, fetchSavedJobs } = useContext(UserContext)
+    
+
     const [results, setResults] = useState(() => {
-        const storedJobs = localStorage.getItem("jobs");
-        return storedJobs ? JSON.parse(storedJobs) : [];
+        try {
+            const storedJobs = localStorage.getItem("storedJobs");
+            return storedJobs ? JSON.parse(storedJobs) : [];
+        } catch (error) {
+            console.error("Error parsing stored jobs:", error);
+            return []; // Fallback to empty array
+        }
     });
+
+    const [userData, setUserData] = useState(() => {
+        const storedUserData = localStorage.getItem("userData");
+        return storedUserData ? JSON.parse(storedUserData) : null;
+    });
+
+    
+    if (results) {
+        
+        console.log("Results", results)
+    } else {console.log("NOT RESULTS")}
+    
+    useEffect(() => {
+        async function loadJobs() {
+            try {
+                const fetchedJobs = await fetchSavedJobs(token);
+                localStorage.setItem("storedJobs", JSON.stringify(fetchedJobs));
+                setResults(fetchedJobs);
+            } catch (error) {
+                console.error("Error fetching saved jobs:", error);
+                setResults([]); // Ensure results is always an array
+            }
+        }
+    
+        if (!localStorage.getItem("storedJobs")) {
+            loadJobs();
+        }
+    }, [token, fetchSavedJobs]);
+    
+    // Log results *after* it's updated
+    // useEffect(() => {
+    //     console.log("Updated Results:", results);
+    // }, [results]);
+
 
     useEffect(() => {
         // Detect system preference for dark mode
@@ -19,25 +65,49 @@ export default function JobSearch() {
         const handleChange = (e) => setIsDarkMode(e.matches);
         darkModeQuery.addEventListener('change', handleChange);
 
+        // Set saved jobs from user data if available
+        if (userData && userData.saved_jobs) {
+            setSavedJobs(userData.saved_jobs);
+        }
+
         return () => darkModeQuery.removeEventListener('change', handleChange);
-    }, []);
+    }, [userData, setSavedJobs]);
+
 
     const handleJobSearch = async (e) => {
         e.preventDefault();
-
-        const searchResults = await fetchJobs(location);
-        if (searchResults.jobs) {
-            localStorage.setItem("jobs", JSON.stringify(searchResults.jobs));
-            setResults(searchResults.jobs);
-        } else {
-            localStorage.setItem("jobs", JSON.stringify(searchResults.cached_jobs))
-            setResults(searchResults.cached_jobs)
+        const context = {
+            "location": location, 
+            "title": title,
+            "userPreferences": userData?.preferences || {}
+        };
+        try {
+            const searchResults = await fetchJobs(context, token);
+            if (searchResults.jobs) {
+                localStorage.setItem("storedJobs", JSON.stringify(searchResults.jobs));
+                setResults(searchResults.jobs);
+                
+            } else if (searchResults.cached_jobs) {
+                localStorage.setItem("storedJobs", JSON.stringify(searchResults.cached_jobs));
+                
+                setResults(searchResults.cached_jobs);
+            } else {
+                console.log(searchResults)
+                setResults([]);
+            }
+        } catch (error) {
+            console.error("Error fetching jobs:", error);
+            setResults([]);
         }
     };
 
-    const handleChange = (e) => {
+    const handleLocationChange = (e) => {
         setLocation(e.target.value);
     };
+
+    const handleTitleChange = (e) => {
+        setTitle(e.target.value);
+    }
 
     return (
         <div 
@@ -55,6 +125,15 @@ export default function JobSearch() {
             }}
         >
             <h2 style={{ textAlign: "center", color: "#44BBA4" }}>Job Search</h2>
+            {userData && (
+                <div style={{ 
+                    textAlign: "center", 
+                    marginBottom: "20px",
+                    color: isDarkMode ? "#ffffff" : "#000000"
+                }}>
+                    Welcome, {userData.username}!
+                </div>
+            )}
 
             <Box
                 sx={{
@@ -77,8 +156,34 @@ export default function JobSearch() {
                     name="location"
                     placeholder="Job Location"
                     value={location}
-                    onChange={handleChange}
+                    onChange={handleLocationChange}
                     helperText="Enter City, State Abbreviation, or Remote"
+                    fullWidth
+                    sx={{ 
+                        maxWidth: 400,
+                        input: { 
+                            color: isDarkMode ? "#ffffff" : "#000000",
+                        },
+                        label: { 
+                            color: isDarkMode ? "#bbbbbb" : "#555555" 
+                        },
+                        fieldset: { 
+                            borderColor: isDarkMode ? "##00897B" : "#ccc" 
+                        },
+                        "& .MuiInputBase-root": {
+                            backgroundColor: isDarkMode ? "#333333" : "#ffffff"
+                        }
+                    }} 
+                />
+                <TextField
+                    required
+                    id="title"
+                    label="title"
+                    name="title"
+                    placeholder="Job Title"
+                    value={title}
+                    onChange={handleTitleChange}
+                    helperText="Enter job position name"
                     fullWidth
                     sx={{ 
                         maxWidth: 400,
@@ -113,8 +218,8 @@ export default function JobSearch() {
                 </Button>
             </Box>
 
-            <div style={{ maxHeight: "350px", overflowY: "auto" }}>
-                <Results results={results} />
+            <div style={{ maxHeight: "auto", overflowY: "1000px" }}>
+            <Results results={Array.isArray(results) && results.length > 0 ? results : (Array.isArray(savedJobs) ? savedJobs : [])} />
             </div>
         </div>
     );

@@ -23,7 +23,7 @@ export default function Results({ results }) {
 
     return (
         <>
-            {results.length === 0 ? (
+            {!results || results.length === 0 ? (
                 <p>No jobs found.</p>
             ) : (
                 <ul style={{ padding: 0, listStyleType: "none" }}>

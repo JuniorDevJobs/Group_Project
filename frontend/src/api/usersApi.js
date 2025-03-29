@@ -34,9 +34,6 @@ export async function deleteUser(token) {
 }
 
 
-
-
-
 export async function updateUser(context, token) {
     console.log(context)
     const payload = {
@@ -50,3 +47,27 @@ export async function updateUser(context, token) {
     const body = await basicFetch(`${apiUrl}/accounts/update-user/`,payload)
     return body
   }
+
+
+export async function getSearches(token) {
+    const payload = {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": `Bearer ${token}`
+      },
+    }
+    
+    try {
+      const response = await fetch(`${apiUrl}/accounts/get-searches/`, payload);
+      if (!response.ok) {
+          console.error("Error fetching searches:", response.status, response.statusText);
+          return null;
+      }
+      const body = await response.json();
+      return body;
+  } catch (error) {
+      console.error("Fetch error:", error);
+      return null;
+  }
+}

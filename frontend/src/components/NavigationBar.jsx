@@ -18,10 +18,13 @@ function NavigationBar() {
     const handleLoginLogout = () => {
         if (loggedIn) {
             setLoggedIn(false);
-            localStorage.removeItem("access");
-            localStorage.removeItem("refresh");
-            localStorage.removeItem("jobs")
-            localStorage.removeItem("username")
+            localStorage.clear()
+            // localStorage.removeItem("access");
+            // localStorage.removeItem("refresh");
+            // localStorage.removeItem("jobs")
+            // localStorage.removeItem("username");
+            // localStorage.removeItem("userData");
+            localStorage.removeItem("storedJobs")
             navigate("/");
         } else {
             navigate("/login");
