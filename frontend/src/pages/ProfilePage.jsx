@@ -1,4 +1,4 @@
-import { Avatar, Button, Dialog, DialogActions, DialogContent, DialogTitle, TextField } from "@mui/material";
+import { Avatar, Button, Dialog, DialogActions, DialogContent, DialogTitle, TextField, Card, CardContent, CardActions, Typography, Alert } from "@mui/material";
 import { useContext, useState } from "react"
 import { deleteUser } from "../api/usersApi";
 import { useNavigate } from "react-router-dom";
@@ -7,15 +7,17 @@ import { updateUser } from "../api/usersApi";
 export default function Profile() {
     const [username, setUsername] = useState(localStorage.getItem("username"))
     const [open, setOpen]=useState (false)
-    const [email, setEmail]=useState("")
+    const [email, setEmail]=useState(localStorage.getItem("email"))
     const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
     const [error, setError]=useState("")
     const {loggedin, setLoggedIn} = useContext(UserContext)
     const token = localStorage.getItem("access");
+    const [alertMessage, setAlertMessage] = useState(null)
+    const userData = JSON.parse(localStorage.getItem("userData"))
 
     const navigate = useNavigate()
-    if (!username){
-        return "Login to view profile"
+    if (!username) {
+        return <Typography variant="h6">Must be logged in to view profile.</Typography>;
     }
     const handleOpen = () => {
         setOpen(true);
@@ -35,7 +37,11 @@ export default function Profile() {
         const response = await updateUser(context, token)
         setOpen(false);
         setError("")
-        alert(response.message)
+        localStorage.setItem("email", context.email)
+        setAlertMessage(response.message)
+        setTimeout(() => {
+            setAlertMessage(null);
+        }, 2500);
     };
 
 
@@ -50,33 +56,31 @@ export default function Profile() {
     const handleDeleteConfirm = async () => {
     
         try {
-            // Call deleteUser function
             const response = await deleteUser(token);
-            
-            // Notify the user and navigate after successful deletion
             localStorage.clear()
-            setLoggedIn(false)
-            alert(response); // You can replace alert with a proper UI notification
-            navigate("/"); // Navigate to home after successful deletion
+            setLoggedIn(false);
+            setUsername(null); 
+
         } catch (error) {
             console.error("Error deleting user", error);
-            // You can handle errors here, if any occur
+            setAlertMessage({ type: "error", text: "Failed to delete user. Please try again." });
         }
     };
     return (
-        <>
-        <div>
-        <Avatar sx ={{background: "teal"}}>
-        {username.charAt(0).toUpperCase()}
-        </Avatar> {username}
-        </div>
-        <br/>
+        <Card sx={{ maxWidth: 400, margin: "auto", padding: 3, textAlign: "center", boxShadow: 3, background:"#eeeeee" }}>
+        <CardContent>
         
-        <Button variant="contained" onClick={handleOpen}>Update Contact</Button>
+        <Avatar sx ={{background: "teal", margin: "auto"}}>
+        {username.charAt(0).toUpperCase()}
+        </Avatar> 
+        <Typography variant="h6" sx={{ marginTop: 2 }}>{username}</Typography>
+        <Typography variant="h6" sx={{ marginBottom: 2 }}>{email}</Typography>
+        <Button sx={{opacity:.8, color: "black"}} variant="contained" onClick={handleOpen}>Update Email</Button>
+        {alertMessage && <Alert severity="success">{alertMessage}</Alert>}
         <Dialog open={open} onClose={handleClose}>
                 <DialogTitle>Update Email</DialogTitle>
                 <DialogContent>
-                    {error}
+                    {error && <Typography color="error">{error}</Typography>}
                     <TextField
                         autoFocus
                         margin="dense"
@@ -93,10 +97,11 @@ export default function Profile() {
                     <Button onClick={handleSave} color="primary">Save</Button>
                 </DialogActions>
             </Dialog>
-            <br/>
-            <br/>
+            
             <Button
-            sx={{background: "red"}} onClick={handleDeleteOpen}>Delete Account</Button>
+                sx={{background: "#ff7373", opacity: 0.8, margin: 2.5, color: "black"}} 
+                onClick={handleDeleteOpen}>Delete Account</Button>
+
             <Dialog open={deleteDialogOpen} onClose={handleDeleteClose}>
                 <DialogTitle>Confirm Account Deletion</DialogTitle>
                 <DialogContent>
@@ -107,6 +112,8 @@ export default function Profile() {
                     <Button onClick={handleDeleteConfirm} color="error">Delete</Button>
                 </DialogActions>
             </Dialog>
-        </>
+            </CardContent>
+            </Card>
+        
     )
 }

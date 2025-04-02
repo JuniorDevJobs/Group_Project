@@ -34,6 +34,7 @@ export default function LoginPage() {
             localStorage.setItem("access", userInfo.access);
             localStorage.setItem("refresh", userInfo.refresh);
             localStorage.setItem("username", formData.username);
+            localStorage.setItem("email",userInfo.email)
             localStorage.setItem("userData", JSON.stringify({
                 username: formData.username,
                 email: userInfo.email || "",
