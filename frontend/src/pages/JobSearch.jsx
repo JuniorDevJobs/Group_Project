@@ -51,11 +51,6 @@ export default function JobSearch() {
         }
     }, [token, fetchSavedJobs]);
     
-    // Log results *after* it's updated
-    // useEffect(() => {
-    //     console.log("Updated Results:", results);
-    // }, [results]);
-
 
     useEffect(() => {
         // Detect system preference for dark mode
@@ -118,13 +113,14 @@ export default function JobSearch() {
                 width: "100%",  // Ensures it is responsive but constrained
                 margin: "0 auto",
                 paddingTop: "20px",
-                backgroundColor: isDarkMode ? "#121212" : "#f4f4f4", 
+                backgroundColor: isDarkMode ? "#323232" : "#f4f4f4", 
                 color: isDarkMode ? "#ffffff" : "#000000", 
                 minHeight: "100vh",
-                padding: "20px"
+                padding: "20px",
+                fontFamily: "sans-serif"
             }}
         >
-            <h2 style={{ textAlign: "center", color: "#44BBA4" }}>Job Search</h2>
+            <h2 style={{ textAlign: "center", color: "#44BBA4", fontFamily: "Impact" }}>Job Search</h2>
             {userData && (
                 <div style={{ 
                     textAlign: "center", 
@@ -145,7 +141,7 @@ export default function JobSearch() {
                     padding: "15px",
                     borderRadius: "8px",
                     boxShadow: isDarkMode 
-                        ? "0px 4px 10px rgba(0, 255, 242, 0.3)" 
+                        ? "0px 4px 10px rgba(196, 128, 252, 0.3)" 
                         : "0px 4px 10px rgba(0, 0, 0, 0.1)"
                 }}
             >
@@ -172,18 +168,20 @@ export default function JobSearch() {
                         },
                         "& .MuiInputBase-root": {
                             backgroundColor: isDarkMode ? "#333333" : "#ffffff"
-                        }
+                        },
+                        "& .MuiFormHelperText-root": {
+                            color: isDarkMode ? "#ffffff" : "#000000" }
                     }} 
                 />
                 <TextField
-                    required
+                    optional
                     id="title"
-                    label="title"
+                    label="Job title"
                     name="title"
                     placeholder="Job Title"
                     value={title}
                     onChange={handleTitleChange}
-                    helperText="Enter job position name"
+                    helperText="Enter optional job title, defaults to developer"
                     fullWidth
                     sx={{ 
                         maxWidth: 400,
@@ -198,7 +196,9 @@ export default function JobSearch() {
                         },
                         "& .MuiInputBase-root": {
                             backgroundColor: isDarkMode ? "#333333" : "#ffffff"
-                        }
+                        },
+                        "& .MuiFormHelperText-root": {
+                            color: isDarkMode ? "#ffffff" : "#000000" }
                     }} 
                 />
                 <Button

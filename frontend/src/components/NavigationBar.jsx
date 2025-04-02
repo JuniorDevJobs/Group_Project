@@ -9,7 +9,7 @@ import Button from '@mui/material/Button';
 import { useNavigate } from 'react-router-dom';
 import UserContext from '../context/UserContext';
 
-const pages = ['Profile','Job Search', 'Resources'];
+const pages = ['Job Search', 'Resources'];
 
 function NavigationBar() {
     const {loggedIn, setLoggedIn} = useContext(UserContext);
@@ -40,8 +40,8 @@ function NavigationBar() {
             position="fixed" 
             sx={{ 
                 backgroundColor: '#6a4c9c', // Dark Lavender
-                borderRadius: '10px', // Rounded corners
-                overflow: 'hidden' // Prevents clipping of rounded corners
+                overflow: 'hidden', // Prevents clipping of rounded corners
+                opacity: 0.8
             }}
         >
             <Container maxWidth="false">
