@@ -30,7 +30,7 @@ export default function ResourcesPage() {
              <h2 class = "ril"> LinkedIn 💻 </h2>
                <a href = "https://learning.linkedin.com/resources" target = "_blank"><img src = "https://learning.linkedin.com/content/dam/me/business/en-us/amp/learning-solutions/images/lls-resources/hub/learning-resource-center-soc-share.jpg" alt = "linkedin1"></img></a>
                <a href = "https://insidea.com/blog/linkedin/linkedin-profile-optimization-tips/" target = "_blank"><img src = "https://insidea.com/wp-content/uploads/2023/11/INSIDEA-145-1-1.png" alt = "linkedin2"></img></a>
-               <a href = "https://www.linkedin.com/company/act-now-education/posts/?feedView=all" target = "_blank"><img src = "https://media.licdn.com/dms/image/v2/D4E10AQEJeFQ1-pzK1A/ads-document-images_800/B4EZWAW8Z5HcAk-/1/1741615269238?e=1743033600&v=beta&t=XhMmxcUiIGI8g2s7txHVUYHStlxVb1QLZDQPohsEeNg" alt = "linkedin3"></img></a>
+               <a href = "https://actnoweducation.org/" target = "_blank"><img src = "https://images.leadconnectorhq.com/image/f_webp/q_80/r_1200/u_https://assets.cdn.filesafe.space/4FGn4QhRWLJHep2RysaF/media/e86369e4-983a-41db-a436-ec527fabdbfd.png" alt = "linkedin3"></img></a>
                <a href = "https://vistasocial.com/insights/linkedin-algorithm-in-2025/" target = "_blank"><img src = "https://dc4ifv9abstiv.cloudfront.net/blog/2025/01/Linkedin-Algorithm-in-2025.jpg?v=1736606444580" alt = "linkedin4"></img></a>
                <a href = "https://contentdrips.com/blog/2024/12/want-to-make-your-linkedin-profile-stand-out-in-2025-heres-how/" target = "_blank"><img src = "https://contentdrips.com/wp-content/uploads/2024/12/Screenshot-2024-12-02-at-2.37.25-AM.png" alt = "linkedin5"></img></a>
 
