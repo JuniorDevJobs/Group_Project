@@ -3,6 +3,7 @@ import { TextField, Button, Box } from "@mui/material";
 import Results from "../components/JobResultsComponent";
 import { fetchJobs } from "../api/jobs";
 import UserContext from "../context/UserContext"
+import { Dialog, DialogContent, DialogTitle} from '@mui/material';
 
 export default function JobSearch() {
     const [location, setLocation] = useState("");
