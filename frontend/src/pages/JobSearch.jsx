@@ -1,5 +1,5 @@
 import { useState, useEffect, useContext } from "react";
-import { TextField, Button, Box } from "@mui/material";
+import { TextField, Button, Box, Typography } from "@mui/material";
 import Results from "../components/JobResultsComponent";
 import { fetchJobs } from "../api/jobs";
 import UserContext from "../context/UserContext"
@@ -127,7 +127,8 @@ export default function JobSearch() {
                     marginBottom: "20px",
                     color: isDarkMode ? "#ffffff" : "#000000"
                 }}>
-                    Welcome, {userData.username}!
+                    <Typography sx={{fontFamily: "Monoco", fontWeight: "bold" , fontSize: "1.3em"}}
+                    >Welcome, {userData.username}!</Typography>
                 </div>
             )}
 
