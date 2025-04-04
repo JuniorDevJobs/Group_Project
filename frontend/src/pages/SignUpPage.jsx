@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { Paper, Box, TextField } from "@mui/material";
+import { Paper, Box, TextField, Typography, Alert } from "@mui/material";
 import Button from "@mui/material/Button";
 import { signup } from "../api/Authapi";
 
@@ -8,6 +8,7 @@ export default function SignUp() {
     const [loading, setLoading] = useState(false);
     const [formData, setFormData] = useState({ username: "", password: "", email: "" });
     const [errors, setErrors] = useState({ username: "", password: "", email: "" });
+    const [loginError, setLoginError] = useState("")
     const navigate = useNavigate();
 
     const handleNavigate = () => {
@@ -34,7 +35,10 @@ export default function SignUp() {
             if (!value.includes("@")) {
                 errorMsg = "Email must contain an @ symbol.";
             }
-        }
+        }else if (name === "username") {
+            if (value.length < 4) {
+                errorMsg = "Username must be atleast 4 characters";
+            }}
         setErrors((prevErrors) => ({ ...prevErrors, [name]: errorMsg }));
     };
 
@@ -58,6 +62,10 @@ export default function SignUp() {
         setLoading(true);
         try {
             const userInfo = await signup(formData);
+            if (Array.isArray(userInfo.username) && userInfo.username.includes('A user with that username already exists.')) {
+                setLoginError('A user with that username already exists.');
+                return;
+            }
             if (userInfo) {
                 navigate("/login");
             } else {
@@ -72,7 +80,9 @@ export default function SignUp() {
 
     return (
         <Paper square={false} elevation={4}>
-            <h3>Sign Up</h3>
+            <Typography sx={{fontSize: 25, fontFamily: "Impact", } }> Sign Up</Typography>
+            {loginError && 
+            <Alert severity="error">{loginError}</Alert>}
             <Box component="form" sx={{ "& .MuiTextField-root": { m: 1, width: "25ch" } }} noValidate autoComplete="off" onSubmit={handleSignUp}>
                 <div>
                     <TextField
@@ -115,12 +125,12 @@ export default function SignUp() {
                     />
                 </div>
                 <div>
-                    <Button type="submit" variant="contained" disabled={loading}>
-                        {loading ? "Signing up..." : "Submit"}
+                    <Button sx={{backgroundColor: "#44BBA4" }} type="submit" variant="contained" disabled={loading}>
+                        {loading ? "Signing up..." : "Sign Up"}
                     </Button>
                 </div>
-                <p> Have an account?</p>
-                <Button onClick={handleNavigate}> Sign In </Button>
+                <p> Already have an account?</p>
+                <Button sx={{marginBottom: 2, backgroundColor: "#bc6de5", opacity: .8}}variant="contained" onClick={handleNavigate}> Log in Here </Button>
             </Box>
         </Paper>
     );

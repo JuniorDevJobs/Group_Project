@@ -1,6 +1,6 @@
 import React, { useContext, useState } from "react";
 import { useNavigate } from 'react-router-dom';
-import { Paper, Box, TextField } from "@mui/material";
+import { Paper, Box, TextField, Typography, Alert } from "@mui/material";
 import Button from '@mui/material/Button';
 import { login } from "../api/Authapi";
 import UserContext from "../context/UserContext";
@@ -58,8 +58,10 @@ export default function LoginPage() {
 
     return (
         <Paper square={false} elevation={4}>
-            <h3>Login</h3>
-            {error}
+            <Typography sx={{fontSize: 25, fontFamily: "Impact", } }>Login </Typography>
+            {error && (
+            <Alert severity="error" sx={{color:"black"}}>{error}</Alert>)}
+
             <Box
                 component="form"
                 onSubmit={handleLogin}
@@ -94,13 +96,14 @@ export default function LoginPage() {
                         type="submit"
                         variant="contained"
                         disabled={loading}
+                        sx={{backgroundColor: "#44BBA4" }}
                     >
                         {loading ? "Logging in..." : "Submit"}
                     </Button>
                 </div>
             </Box>
             <p>Need an account?</p>
-            <Button onClick={handleNewUser}>Create an Account</Button>
+            <Button sx={{marginBottom: 2, backgroundColor: "#bc6de5", opacity: .8}}variant="contained" onClick={handleNewUser}>Create an Account</Button>
         </Paper>
     );
 }

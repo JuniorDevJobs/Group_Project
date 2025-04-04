@@ -42,7 +42,6 @@ export default function Homepage() {
                 <h1 style={
                     {
                         fontSize: '3em',
-                        // color: isDarkMode ? '#ffffff' : '#555',
                     }
                 }>Junior Dev Jobs</h1>
 
