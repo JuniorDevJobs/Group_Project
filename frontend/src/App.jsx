@@ -8,6 +8,7 @@ import JobSearch from './pages/JobSearch'
 import ResourcesPage from './pages/ResourcesPage'
 import { UserProvider } from './context/UserContext'
 import Profile from './pages/ProfilePage'
+import AboutUs from './pages/AboutUs'
 function App() {
 
   return (
@@ -23,6 +24,7 @@ function App() {
           <Route path="/signup" element = {<SignUpPage />} />
           <Route path="/JobSearch" element={<JobSearch />} />
           <Route path="/Resources" element={<ResourcesPage />} />
+          <Route path="/AboutUs" element ={<AboutUs />} />
         </Routes>
       </ UserProvider >
       </BrowserRouter>
