@@ -1,119 +1,168 @@
-import { Avatar, Button, Dialog, DialogActions, DialogContent, DialogTitle, TextField, Card, CardContent, CardActions, Typography, Alert } from "@mui/material";
-import { useContext, useState } from "react"
-import { deleteUser } from "../api/usersApi";
+import {
+    Avatar, Button, Dialog, DialogActions, DialogContent, DialogTitle,
+    TextField, Card, CardContent, Typography, Snackbar, Slide, InputAdornment
+} from "@mui/material";
+import { Email, Delete, Edit } from "@mui/icons-material";
+import { useContext, useState } from "react";
+import { deleteUser, updateUser } from "../api/usersApi";
 import { useNavigate } from "react-router-dom";
 import UserContext from "../context/UserContext";
-import { updateUser } from "../api/usersApi";
-export default function Profile() {
-    const [username, setUsername] = useState(localStorage.getItem("username"))
-    const [open, setOpen]=useState (false)
-    const [email, setEmail]=useState(localStorage.getItem("email"))
-    const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
-    const [error, setError]=useState("")
-    const {loggedin, setLoggedIn} = useContext(UserContext)
-    const token = localStorage.getItem("access");
-    const [alertMessage, setAlertMessage] = useState(null)
-    const userData = JSON.parse(localStorage.getItem("userData"))
 
-    const navigate = useNavigate()
+function SlideUp(props) {
+    return <Slide {...props} direction="up" />;
+}
+
+export default function Profile() {
+    const [username, setUsername] = useState(localStorage.getItem("username"));
+    const [email, setEmail] = useState(localStorage.getItem("email"));
+    const [open, setOpen] = useState(false);
+    const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
+    const [confirmText, setConfirmText] = useState("");
+    const [snack, setSnack] = useState({ open: false, message: "", severity: "success" });
+    const { setLoggedIn } = useContext(UserContext);
+    const token = localStorage.getItem("access");
+    const navigate = useNavigate();
+
     if (!username) {
         return <Typography variant="h6">Must be logged in to view profile.</Typography>;
     }
-    const handleOpen = () => {
-        setOpen(true);
-    };
-
-    const handleClose = () => {
-        setOpen(false);
-    };
 
     const handleSave = async (e) => {
-        e.preventDefault()
+        e.preventDefault();
         if (!email) {
-            setError("Must provide new email to update")
-            return
+            setSnack({ open: true, message: "Must provide new email to update.", severity: "error" });
+            return;
         }
-        const context = {"email": email}
-        const response = await updateUser(context, token)
+        const context = { email };
+        const response = await updateUser(context, token);
+        localStorage.setItem("email", context.email);
         setOpen(false);
-        setError("")
-        localStorage.setItem("email", context.email)
-        setAlertMessage(response.message)
-        setTimeout(() => {
-            setAlertMessage(null);
-        }, 2500);
-    };
-
-
-    const handleDeleteOpen = () => {
-        setDeleteDialogOpen(true);
-    };
-
-    const handleDeleteClose = () => {
-        setDeleteDialogOpen(false);
+        setSnack({ open: true, message: response.message, severity: "success" });
     };
 
     const handleDeleteConfirm = async () => {
-    
+        if (confirmText !== "DELETE") {
+            setSnack({ open: true, message: "You must type DELETE to confirm.", severity: "warning" });
+            return;
+        }
         try {
-            const response = await deleteUser(token);
-            localStorage.clear()
+            await deleteUser(token);
+            localStorage.clear();
             setLoggedIn(false);
-            setUsername(null); 
-
+            setUsername(null);
+            navigate("/");
         } catch (error) {
             console.error("Error deleting user", error);
-            setAlertMessage({ type: "error", text: "Failed to delete user. Please try again." });
+            setSnack({ open: true, message: "Failed to delete user. Try again.", severity: "error" });
         }
     };
+
     return (
-        <Card sx={{ maxWidth: 400, margin: "auto", padding: 3, textAlign: "center", boxShadow: 3, background:"#eeeeee" }}>
-        <CardContent>
-        
-        <Avatar sx ={{background: "teal", margin: "auto"}}>
-        {username.charAt(0).toUpperCase()}
-        </Avatar> 
-        <Typography variant="h6" sx={{ marginTop: 2 }}>{username}</Typography>
-        <Typography variant="h6" sx={{ marginBottom: 2 }}>{email}</Typography>
-        <Button sx={{opacity:.8, color: "black"}} variant="contained" onClick={handleOpen}>Update Email</Button>
-        {alertMessage && <Alert severity="success">{alertMessage}</Alert>}
-        <Dialog open={open} onClose={handleClose}>
+        <Card sx={{
+            maxWidth: 400,
+            margin: "auto",
+            mt: 4,
+            p: 3,
+            textAlign: "center",
+            boxShadow: 4,
+            background: "#f7f9fb",
+            borderRadius: 3
+        }}>
+            <CardContent>
+                <Avatar sx={{
+                    background: "teal",
+                    width: 64,
+                    height: 64,
+                    margin: "auto",
+                    boxShadow: "0 0 12px teal"
+                }}>
+                    {username.charAt(0).toUpperCase()}
+                </Avatar>
+                <Typography variant="h6" sx={{ mt: 2 }}>{username}</Typography>
+                <Typography variant="subtitle1" sx={{ mb: 2, opacity: 0.8 }}>{email}</Typography>
+
+                <Button
+                    variant="outlined"
+                    startIcon={<Edit />}
+                    onClick={() => setOpen(true)}
+                    sx={{ mb: 2, width: "100%" }}
+                >
+                    Update Email
+                </Button>
+
+                <Button
+                    variant="contained"
+                    startIcon={<Delete />}
+                    onClick={() => setDeleteDialogOpen(true)}
+                    sx={{
+                        backgroundColor: "#ff6b6b",
+                        color: "white",
+                        "&:hover": {
+                            backgroundColor: "#ff4c4c"
+                        },
+                        width: "100%"
+                    }}
+                >
+                    Delete Account
+                </Button>
+            </CardContent>
+
+            {/* Update Email Dialog */}
+            <Dialog open={open} onClose={() => setOpen(false)} TransitionComponent={SlideUp}>
                 <DialogTitle>Update Email</DialogTitle>
                 <DialogContent>
-                    {error && <Typography color="error">{error}</Typography>}
                     <TextField
                         autoFocus
                         margin="dense"
                         label="New Email Address"
                         type="email"
                         fullWidth
-                        variant="outlined"
                         value={email}
                         onChange={(e) => setEmail(e.target.value)}
+                        InputProps={{
+                            startAdornment: (
+                                <InputAdornment position="start">
+                                    <Email />
+                                </InputAdornment>
+                            ),
+                        }}
                     />
                 </DialogContent>
                 <DialogActions>
-                    <Button onClick={handleClose} color="secondary">Cancel</Button>
+                    <Button onClick={() => setOpen(false)} color="secondary">Cancel</Button>
                     <Button onClick={handleSave} color="primary">Save</Button>
                 </DialogActions>
             </Dialog>
-            
-            <Button
-                sx={{background: "#ff7373", opacity: 0.8, margin: 2.5, color: "black"}} 
-                onClick={handleDeleteOpen}>Delete Account</Button>
 
-            <Dialog open={deleteDialogOpen} onClose={handleDeleteClose}>
-                <DialogTitle>Confirm Account Deletion</DialogTitle>
+            {/* Delete Confirmation Dialog */}
+            <Dialog open={deleteDialogOpen} onClose={() => setDeleteDialogOpen(false)} TransitionComponent={SlideUp}>
+                <DialogTitle>Confirm Deletion</DialogTitle>
                 <DialogContent>
-                    Are you sure you want to delete your account? This action is irreversible.
+                    <Typography sx={{ mb: 2 }}>
+                        Type <b>DELETE</b> to confirm account deletion. This action is irreversible.
+                    </Typography>
+                    <TextField
+                        autoFocus
+                        fullWidth
+                        value={confirmText}
+                        onChange={(e) => setConfirmText(e.target.value)}
+                        placeholder="Type DELETE"
+                    />
                 </DialogContent>
                 <DialogActions>
-                    <Button onClick={handleDeleteClose} color="secondary">Cancel</Button>
+                    <Button onClick={() => setDeleteDialogOpen(false)} color="secondary">Cancel</Button>
                     <Button onClick={handleDeleteConfirm} color="error">Delete</Button>
                 </DialogActions>
             </Dialog>
-            </CardContent>
-            </Card>
-        
-    )
+
+            {/* Snackbar Notification */}
+            <Snackbar
+                open={snack.open}
+                onClose={() => setSnack({ ...snack, open: false })}
+                autoHideDuration={3000}
+                message={snack.message}
+                anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
+            />
+        </Card>
+    );
 }

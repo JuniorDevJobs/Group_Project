@@ -3,6 +3,7 @@ import { TextField, Button, Box, Typography } from "@mui/material";
 import Results from "../components/JobResultsComponent";
 import { fetchJobs } from "../api/jobs";
 import UserContext from "../context/UserContext"
+import { Search, LocationOn } from "@mui/icons-material";
 import { Dialog, DialogContent, DialogTitle} from '@mui/material';
 
 export default function JobSearch() {
@@ -109,42 +110,66 @@ export default function JobSearch() {
         <div 
             className="page-container"
             style={{ 
-                minWidth:"800px",
-                maxWidth: "800px",  // Prevents growing beyond this width
-                width: "100%",  // Ensures it is responsive but constrained
+                minWidth: "800px",
+                maxWidth: "800px",
+                width: "100%",
                 margin: "0 auto",
                 paddingTop: "20px",
-                backgroundColor: isDarkMode ? "#323232" : "#f4f4f4", 
-                color: isDarkMode ? "#ffffff" : "#000000", 
                 minHeight: "100vh",
                 padding: "20px",
-                fontFamily: "sans-serif"
+                fontFamily: "'Segoe UI', Tahoma, Geneva, Verdana, sans-serif",
+                background: isDarkMode 
+                    ? "linear-gradient(to bottom right, #1a1a1a, #2c2c2c)" 
+                    : "linear-gradient(to bottom right, #ffffff, #f0f0f0)",
+                color: isDarkMode ? "#ffffff" : "#000000"
             }}
         >
-            <h2 style={{ textAlign: "center", color: "#44BBA4", fontFamily: "Impact" }}>Job Search</h2>
+            <h2 
+                style={{ 
+                    textAlign: "center", 
+                    color: "#44BBA4", 
+                    fontFamily: "'Impact', sans-serif", 
+                    letterSpacing: "1px",
+                    fontSize: "2.5rem",
+                    marginBottom: "10px",
+                    textShadow: isDarkMode ? "1px 1px #000" : "1px 1px #ccc"
+                }}
+            >
+                💼 Job Search
+            </h2>
             {userData && (
                 <div style={{ 
                     textAlign: "center", 
                     marginBottom: "20px",
                     color: isDarkMode ? "#ffffff" : "#000000"
                 }}>
-                    <Typography sx={{fontFamily: "Monoco", fontWeight: "bold" , fontSize: "1.3em"}}
-                    >Welcome, {userData.username}!</Typography>
+            <Typography 
+                sx={{
+                    fontFamily: "'Courier New', monospace",
+                    fontWeight: "bold",
+                    fontSize: "1.2rem",
+                    color: isDarkMode ? "#A2FFD8" : "#222",
+                    mb: 2,
+                    textAlign: "center"
+                }}
+            >
+                👋 Welcome, {userData.username}!
+            </Typography>
                 </div>
             )}
 
             <Box
                 sx={{
                     display: "flex",
-                    alignItems: "center", 
-                    gap: 2, 
-                    justifyContent: "center",
-                    backgroundColor: isDarkMode ? "#1E1E1E" : "#ffffff",
-                    padding: "15px",
-                    borderRadius: "8px",
+                    flexDirection: "column",
+                    gap: 2,
+                    backgroundColor: isDarkMode ? "#2e2e2e" : "#ffffff",
+                    padding: "20px",
+                    borderRadius: "12px",
                     boxShadow: isDarkMode 
-                        ? "0px 4px 10px rgba(196, 128, 252, 0.3)" 
-                        : "0px 4px 10px rgba(0, 0, 0, 0.1)"
+                        ? "0px 4px 12px rgba(100, 255, 218, 0.15)" 
+                        : "0px 4px 12px rgba(0, 0, 0, 0.1)",
+                    marginBottom: "30px"
                 }}
             >
                 <TextField
@@ -152,76 +177,80 @@ export default function JobSearch() {
                     id="location"
                     label="Location"
                     name="location"
-                    placeholder="Job Location"
+                    placeholder="e.g. Remote, FL or Ca"
                     value={location}
                     onChange={handleLocationChange}
-                    helperText="Enter City, State Abbreviation, or Remote"
+                    helperText="Enter Abreviated State or 'Remote'"
                     fullWidth
-                    sx={{ 
-                        maxWidth: 400,
-                        input: { 
-                            color: isDarkMode ? "#ffffff" : "#000000",
-                        },
-                        label: { 
-                            color: isDarkMode ? "#bbbbbb" : "#555555" 
-                        },
-                        fieldset: { 
-                            borderColor: isDarkMode ? "##00897B" : "#ccc" 
-                        },
+                    sx={{
                         "& .MuiInputBase-root": {
-                            backgroundColor: isDarkMode ? "#333333" : "#ffffff"
+                            backgroundColor: isDarkMode ? "#3b3b3b" : "#fafafa",
+                            borderRadius: "6px"
+                        },
+                        "& label": {
+                            color: isDarkMode ? "#bbb" : "#555"
                         },
                         "& .MuiFormHelperText-root": {
-                            color: isDarkMode ? "#ffffff" : "#000000" }
-                    }} 
+                            color: isDarkMode ? "#ddd" : "#444"
+                        }
+                    }}
                 />
+
                 <TextField
-                    optional
                     id="title"
-                    label="Job title"
+                    label="Job Title"
                     name="title"
-                    placeholder="Job Title"
+                    placeholder="Frontend, Backend, etc."
                     value={title}
                     onChange={handleTitleChange}
-                    helperText="Enter optional job title, defaults to developer"
+                    helperText="Optional, defaults to developer"
                     fullWidth
-                    sx={{ 
-                        maxWidth: 400,
-                        input: { 
-                            color: isDarkMode ? "#ffffff" : "#000000",
-                        },
-                        label: { 
-                            color: isDarkMode ? "#bbbbbb" : "#555555" 
-                        },
-                        fieldset: { 
-                            borderColor: isDarkMode ? "##00897B" : "#ccc" 
-                        },
+                    sx={{
                         "& .MuiInputBase-root": {
-                            backgroundColor: isDarkMode ? "#333333" : "#ffffff"
+                            backgroundColor: isDarkMode ? "#3b3b3b" : "#fafafa",
+                            borderRadius: "6px"
+                        },
+                        "& label": {
+                            color: isDarkMode ? "#bbb" : "#555"
                         },
                         "& .MuiFormHelperText-root": {
-                            color: isDarkMode ? "#ffffff" : "#000000" }
-                    }} 
+                            color: isDarkMode ? "#ddd" : "#444"
+                        }
+                    }}
                 />
                 <Button
                     type="submit"
                     variant="contained"
-                    sx={{ 
-                        height: "100%",
-                        backgroundColor: isDarkMode ? "#00796B" : "#44BBA4",
-                        color: "#ffffff",
+                    sx={{
+                        backgroundColor: isDarkMode ? "#00C9A7" : "#44BBA4",
+                        color: "#fff",
+                        paddingX: "20px",
+                        paddingY: "10px",
+                        fontWeight: "bold",
+                        borderRadius: "8px",
+                        alignSelf: "center",
                         "&:hover": {
-                            backgroundColor: isDarkMode ? "#00897B" : "#3da693"
+                            backgroundColor: isDarkMode ? "#00E5B0" : "#3da693"
                         }
                     }}
                     onClick={handleJobSearch}
                 >
-                    Submit
+                    🔍 Search Jobs
                 </Button>
             </Box>
 
-            <div style={{ maxHeight: "auto", overflowY: "1000px" }}>
-            <Results results={Array.isArray(results) && results.length > 0 ? results : (Array.isArray(savedJobs) ? savedJobs : [])} />
+            <div 
+                style={{ 
+                    marginTop: "20px", 
+                    borderRadius: "10px", 
+                    backgroundColor: isDarkMode ? "#1a1a1a" : "#ffffff", 
+                    padding: "15px",
+                    boxShadow: isDarkMode 
+                        ? "0px 4px 8px rgba(255, 255, 255, 0.1)" 
+                        : "0px 4px 8px rgba(0, 0, 0, 0.05)"
+                }}
+            >
+                <Results results={Array.isArray(results) && results.length > 0 ? results : (Array.isArray(savedJobs) ? savedJobs : [])} />
             </div>
         </div>
     );
