@@ -8,7 +8,7 @@ async function basicFetch(url, payload) {
   
   
   export async function signup(context) {
-    console.log(context)
+    
     const payload = {
       method: "POST",
       headers: {
@@ -22,7 +22,7 @@ async function basicFetch(url, payload) {
   
 
   export async function login(context) {
-    console.log(context)
+    
     const payload = {
       method: "POST",
       headers: {

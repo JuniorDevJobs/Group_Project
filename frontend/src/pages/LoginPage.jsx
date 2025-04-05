@@ -24,7 +24,7 @@ export default function LoginPage() {
         setLoading(true);
         try {
             const userInfo = await login(formData);
-            // console.log(userInfo)
+            
             if (userInfo.detail) {
                 setError("No account with those credentials. Try Again")
                 setLoading(false)
