@@ -15,6 +15,6 @@ DOCKERHUB_UNAME=danyelleh
 BASE_URL=$1
 NEW_VERSION=$2
 
-docker buildx build --platform linux/amd64 --build-arg VITE_BASE_URL=$BASE_URL -t $DOCKERHUB_UNAME/pathomap-webserver-prod:$NEW_VERSION -f webserver/Dockerfile . --no-cache --push
+docker buildx build --platform linux/amd64 --build-arg VITE_BASE_URL=$BASE_URL -t $DOCKERHUB_UNAME/juniordev-webserver-prod:$NEW_VERSION -f frontend/Dockerfile . --no-cache --push
 
-docker buildx build --platform linux/amd64  -t $DOCKERHUB_UNAME/pathomap-api-prod:$NEW_VERSION -f backend/Dockerfile ./backend --no-cache --push
+# docker buildx build --platform linux/amd64  -t $DOCKERHUB_UNAME/juniordev-api-prod:$NEW_VERSION -f backend/Dockerfile ./backend --no-cache --push

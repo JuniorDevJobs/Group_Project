@@ -5,18 +5,14 @@ export DOCKERHUB_UNAME=danyelleh
 
 # These environment variables come from command line arguments.
 # They are consumed by the docker-compose file.
-export SECRET_KEY=$1
-export DEBUG=$2
-export NEW_VERSION=$3
-export POSTGRES_DB=protein_db
-export POSTGRES_USER=postgres
-export POSTGRES_PASSWORD=postgres
+export DOCKERHUB_UNAME=$1
+export NEW_VERSION=$2
+
 
 docker-compose -f docker-compose.prod.yml build --no-cache
 docker-compose -f docker-compose.prod.yml up -d
 
 # make sure the postgres container is ready, then run migrations
-sleep 10 
 
-docker exec ec2-user-api-1 python /src/manage.py makemigrations 
-docker exec ec2-user-api-1 python /src/manage.py migrate
+docker exec ec2-user-nginx-1 python3 /src/manage.py makemigrations 
+docker exec ec2-user-nginx-1 python3 /src/manage.py migrate

@@ -1,4 +1,4 @@
-const apiUrl = "http://localhost:8090/web"
+const apiUrl = "http://34.201.110.111"
 
 async function basicFetch(url, payload) {
   const res = await fetch(url, payload);

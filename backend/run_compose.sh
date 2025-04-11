@@ -1,13 +1,5 @@
 #!/bin/bash
 
-apt-get update && apt-get install -y postgresql-client redis-tools
-
-if command -v apt-get &> /dev/null; then
-    apt-get update && apt-get install -y jq 
-else
-    yes | brew install jq
-fi
-
 echo "Waiting for PostgreSQL to be available..."
 until pg_isready -U jobs_user -h db -p 5432; do
   echo "PostgreSQL is unavailable - retrying in 2 seconds..."
