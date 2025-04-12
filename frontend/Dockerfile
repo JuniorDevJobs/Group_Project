@@ -14,9 +14,9 @@ WORKDIR /frontend
 ARG VITE_BASE_URL=localhost
 ENV VITE_BASE_URL=$VITE_BASE_URL
 
-COPY ./frontend/package.json .
+COPY ./package.json .
 RUN npm install
-COPY ./frontend .
+COPY . .
 RUN npm install && npm rebuild esbuild && npm run build
 
 ###########################
