@@ -45,18 +45,31 @@ img{
 .resources{
     display:flex; 
     flex-direction: column; 
+    margin: 10px;
+    border: #44BBA4 3px solid; 
+    padding: 10px;
 }
 
 .interview{
     display:flex; 
     flex-direction: column; 
+    margin: 10px;
+    border: #44BBA4 3px solid; 
+    padding: 10px;
 }
 
 .linkedin{
     display:flex; 
     flex-direction: column; 
+    margin: 10px;
+    padding: 10px;
+    border: #44BBA4 3px solid; 
 }
 
+.fix{
+    border: 3px #44BBA4 solid; 
+    padding: 10px; 
+}
 
 /* This ensures the page content has the same max-width as your navigation */
 .page-container {

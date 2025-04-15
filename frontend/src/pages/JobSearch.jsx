@@ -1,5 +1,5 @@
 import { useState, useEffect, useContext } from "react";
-import { TextField, Button, Box, Typography } from "@mui/material";
+import { TextField, Button, Box, Typography, Alert } from "@mui/material";
 import Results from "../components/JobResultsComponent";
 import { fetchJobs } from "../api/jobs";
 import UserContext from "../context/UserContext"
@@ -10,7 +10,7 @@ export default function JobSearch() {
     const [location, setLocation] = useState("");
     const [title, setTitle] = useState("");
     const [isDarkMode, setIsDarkMode] = useState(false);
-    
+    const [errorMessage, setErrorMessage]=useState("")
     const token = localStorage.getItem("access")
     const {setSavedJobs, savedJobs, fetchSavedJobs } = useContext(UserContext)
     
@@ -31,10 +31,11 @@ export default function JobSearch() {
     });
 
     
-    if (results) {
+    // if (results) {
         
-        console.log("Results", results)
-    } else {console.log("NOT RESULTS")}
+    //     console.log("Results", results)
+    // } else {
+    //     console.log("NOT RESULTS")}
     
     useEffect(() => {
         async function loadJobs() {
@@ -80,16 +81,22 @@ export default function JobSearch() {
         };
         try {
             const searchResults = await fetchJobs(context, token);
+            setErrorMessage("")
             if (searchResults.jobs) {
-                localStorage.setItem("storedJobs", JSON.stringify(searchResults.jobs));
-                setResults(searchResults.jobs);
+                if (searchResults.jobs.length === 0) {
+                    setErrorMessage("No results for this search. Ensure you entered your location in the correct format. Use a US state abreviation, Counrty, or Remote")
+                    
+                } else {
+                    localStorage.setItem("storedJobs", JSON.stringify(searchResults.jobs));
+                    setResults(searchResults.jobs);
+                }
                 
             } else if (searchResults.cached_jobs) {
                 localStorage.setItem("storedJobs", JSON.stringify(searchResults.cached_jobs));
                 
                 setResults(searchResults.cached_jobs);
             } else {
-                console.log(searchResults)
+                // add alert message 
                 setResults([]);
             }
         } catch (error) {
@@ -180,7 +187,7 @@ export default function JobSearch() {
                     placeholder="e.g. Remote, FL or Ca"
                     value={location}
                     onChange={handleLocationChange}
-                    helperText="Enter Abreviated State or 'Remote'"
+                    helperText="Enter Abreviated State, Country or 'Remote'"
                     fullWidth
                     sx={{
                         "& .MuiInputBase-root": {
@@ -250,7 +257,11 @@ export default function JobSearch() {
                         : "0px 4px 8px rgba(0, 0, 0, 0.05)"
                 }}
             >
-                <Results results={Array.isArray(results) && results.length > 0 ? results : (Array.isArray(savedJobs) ? savedJobs : [])} />
+            {errorMessage ? (
+                <Alert severity="error">{errorMessage}</Alert>
+            ) : (
+            <Results results={Array.isArray(results) && results.length > 0 ? results : (Array.isArray(savedJobs) ? savedJobs : [])} />
+            )}
             </div>
         </div>
     );

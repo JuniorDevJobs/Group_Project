@@ -8,7 +8,6 @@ async function basicFetch(url, payload) {
   }
 
 export async function fetchJobs(context,token) {
-console.log(context.location)
 const headers = {
   "Content-Type": "application/json",
 };

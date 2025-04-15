@@ -1,8 +1,11 @@
 import React, { useState, useEffect } from "react";
+import { Pagination, Box } from "@mui/material";
 
 export default function Results({ results }) {
     const [isDarkMode, setIsDarkMode] = useState(false);
     const [modalContent, setModalContent] = useState(null);
+    const [page, setPage] = useState(1);
+    const itemsPerPage = 10;
 
     useEffect(() => {
         const darkModeQuery = window.matchMedia("(prefers-color-scheme: dark)");
@@ -22,7 +25,6 @@ export default function Results({ results }) {
         setModalContent(null);
     };
 
-    // Check URL function
     const checkUrl = (url, index) => {
         const iframe = document.createElement("iframe");
         iframe.style.display = "none";
@@ -51,67 +53,85 @@ export default function Results({ results }) {
         alert("This link is invalid or cannot be accessed.");
     };
 
+    const handlePageChange = (event, value) => {
+        setPage(value);
+    };
+
+    // Paginate the results
+    const startIndex = (page - 1) * itemsPerPage;
+    const paginatedResults = results?.slice(startIndex, startIndex + itemsPerPage) || [];
+
     return (
         <>
             {!results || results.length === 0 ? (
-                <p>No jobs found.</p>
+                <p></p>
             ) : (
-                <ul style={{ padding: 0, listStyleType: "none" }}>
-                    {results.map((job, index) => (
-                        <li key={index} style={{ marginBottom: "10px" }}>
-                            <div
-                                style={{
-                                    border: "1px solid #ccc",
-                                    padding: "10px",
-                                    borderRadius: "5px",
-                                    cursor: "pointer",
-                                }}
-                            >
-                                <div style={{ flexGrow: 1 }}>
-                                    <div>
-                                        <strong>{job.title || "Junior Developer"}</strong> - {job.location} <br />
-                                        {job.company}
+                <>
+                    <ul style={{ padding: 0, listStyleType: "none" }}>
+                        {paginatedResults.map((job, index) => (
+                            <li key={startIndex + index} style={{ marginBottom: "10px" }}>
+                                <div
+                                    style={{
+                                        border: "1px solid #ccc",
+                                        padding: "10px",
+                                        borderRadius: "5px",
+                                        cursor: "pointer",
+                                    }}
+                                >
+                                    <div style={{ flexGrow: 1 }}>
+                                        <div>
+                                            <strong>{job.title || "Junior Developer"}</strong> - {job.location} <br />
+                                            {job.company}
+                                        </div>
+
+                                        <button
+                                            onClick={() => openModal(job)}
+                                            style={{
+                                                marginLeft: "10px",
+                                                cursor: "pointer",
+                                                background: "none",
+                                                border: "none",
+                                                color: "#44BBA4",
+                                                fontSize: "14px",
+                                            }}
+                                        >
+                                            View Description
+                                        </button>
                                     </div>
 
-                                    {/* Show Description Button */}
-                                    <button
-                                        onClick={() => openModal(job)}
-                                        style={{
-                                            marginLeft: "10px",
-                                            cursor: "pointer",
-                                            background: "none",
-                                            border: "none",
-                                            color: "#44BBA4",
-                                            fontSize: "14px",
-                                        }}
-                                    >
-                                        View Description
-                                    </button>
+                                    <div style={{ marginTop: "5px" }}>
+                                        <a
+                                            id={`job-link-${startIndex + index}`}
+                                            href={job.url}
+                                            onClick={(e) => {
+                                                e.preventDefault();
+                                                checkUrl(job.url, startIndex + index);
+                                            }}
+                                            target="_blank"
+                                            rel="noopener noreferrer"
+                                            style={{ textDecoration: "none", color: "#44BBA4" }}
+                                        >
+                                            View Job
+                                        </a>
+                                    </div>
                                 </div>
+                            </li>
+                        ))}
+                    </ul>
 
-                                {/* Job link */}
-                                <div style={{ marginTop: "5px" }}>
-                                    <a
-                                        id={`job-link-${index}`}
-                                        href={job.url}
-                                        onClick={(e) => {
-                                            e.preventDefault(); 
-                                            checkUrl(job.url, index); // checks if the url is good.
-                                        }}
-                                        target="_blank"
-                                        rel="noopener noreferrer"
-                                        style={{ textDecoration: "none", color: "#44BBA4" }}
-                                    >
-                                        View Job
-                                    </a>
-                                </div>
-                            </div>
-                        </li>
-                    ))}
-                </ul>
+                    {/* Pagination Component */}
+                    <Box mt={3} display="flex" justifyContent="center">
+                        <Pagination
+                            count={Math.ceil(results.length / itemsPerPage)}
+                            page={page}
+                            onChange={handlePageChange}
+                            color="primary"
+                        />
+                    </Box>
+                </>
             )}
 
-            {/* Modal for Job Description */}
+            {/* Modal */}
             {modalContent && (
                 <div
                     style={{

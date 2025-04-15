@@ -65,7 +65,7 @@ export default function Homepage() {
                 <img
                     src="https://cvviz.com/wp-content/uploads/2020/09/paid-and-free-job-postings-sites.png"
                     alt="Job Posting Sites"
-                    style={{ width: "400px", borderRadius: '10px', boxShadow: '0 4px 8px rgba(0,0,0,0.1)' }}
+                    style={{ width: "575px",height:"400px", objectFit: "contain", borderRadius: '2px', boxShadow: '0 4px 8px rgba(0,0,0,0.1)' }}
                 />
             </div>
 
