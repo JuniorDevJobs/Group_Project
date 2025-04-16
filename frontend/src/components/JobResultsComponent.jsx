@@ -5,7 +5,7 @@ export default function Results({ results }) {
     const [isDarkMode, setIsDarkMode] = useState(false);
     const [modalContent, setModalContent] = useState(null);
     const [page, setPage] = useState(1);
-    const itemsPerPage = 10;
+    const itemsPerPage = 7;
 
     useEffect(() => {
         const darkModeQuery = window.matchMedia("(prefers-color-scheme: dark)");

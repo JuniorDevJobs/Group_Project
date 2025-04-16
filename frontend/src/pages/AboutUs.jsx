@@ -17,14 +17,14 @@ const team = [
   {
     name: "Eunice",
     role: "Backend Developer",
-    linkedIn: "#",
-    github: "#",
+    linkedIn: "https://www.linkedin.com/in/eunice-k/",
+    github: "https://github.com/eunicekoid",
   },
   {
     name: "Sean",
     role: "Backend Developer",
-    linkedIn: "#",
-    github: "#",
+    linkedIn: "https://www.linkedin.com/in/sean-osullivan8",
+    github: "https://github.com/sully8698",
   },
   {
     name: "Danyelle",
@@ -35,8 +35,8 @@ const team = [
   {
     name: "Megan",
     role: "Frontend Developer",
-    linkedIn: "#",
-    github: "#",
+    linkedIn: "https://www.linkedin.com/in/megan-marie-janish/",
+    github: "https://github.com/mnepshinsky",
   },
 ];
 
