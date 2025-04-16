@@ -84,7 +84,7 @@ export default function JobSearch() {
             setErrorMessage("")
             if (searchResults.jobs) {
                 if (searchResults.jobs.length === 0) {
-                    setErrorMessage("No results for this search. Ensure you entered your location in the correct format. Use a US state abreviation, Counrty, or Remote")
+                    setErrorMessage("No results for this search. Ensure you entered your location in the correct format. Use a US state abreviation, Country, or Remote")
                     
                 } else {
                     localStorage.setItem("storedJobs", JSON.stringify(searchResults.jobs));
@@ -189,13 +189,15 @@ export default function JobSearch() {
                     onChange={handleLocationChange}
                     helperText="Enter Abreviated State, Country or 'Remote'"
                     fullWidth
+                    
                     sx={{
                         "& .MuiInputBase-root": {
                             backgroundColor: isDarkMode ? "#3b3b3b" : "#fafafa",
-                            borderRadius: "6px"
+                            borderRadius: "6px",
+                            color: isDarkMode ? "#FFFFFF" : "#555",
                         },
                         "& label": {
-                            color: isDarkMode ? "#bbb" : "#555"
+                            color: isDarkMode ? "#ffffff" : "#555"
                         },
                         "& .MuiFormHelperText-root": {
                             color: isDarkMode ? "#ddd" : "#444"
@@ -213,12 +215,14 @@ export default function JobSearch() {
                     helperText="Optional, defaults to developer"
                     fullWidth
                     sx={{
+                        
                         "& .MuiInputBase-root": {
                             backgroundColor: isDarkMode ? "#3b3b3b" : "#fafafa",
-                            borderRadius: "6px"
+                            borderRadius: "6px",
+                            color: isDarkMode ? "#FFFFFF" : "#555",
                         },
                         "& label": {
-                            color: isDarkMode ? "#bbb" : "#555"
+                            color: isDarkMode ? "#FFFFFF" : "#555"
                         },
                         "& .MuiFormHelperText-root": {
                             color: isDarkMode ? "#ddd" : "#444"

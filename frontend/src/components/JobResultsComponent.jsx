@@ -126,6 +126,19 @@ export default function Results({ results }) {
                             page={page}
                             onChange={handlePageChange}
                             color="primary"
+                            sx={{
+                                '& .MuiPaginationItem-root': {
+                                  color: '#44BBA4', // text color
+                                  borderColor: '#44BBA4', // border for outlined buttons
+                                },
+                                '& .Mui-selected': {
+                                  backgroundColor: '#44BBA4',
+                                  color: '#fff',
+                                  '&:hover': {
+                                    backgroundColor: '#3da893',
+                                  },
+                                },
+                              }}
                         />
                     </Box>
                 </>
